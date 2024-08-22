@@ -9,25 +9,32 @@ import {
 } from "@mui/material";
 import { useContext, useEffect } from "react";
 
-const THeader = ({ activeTable }: { activeTable: string }) => {
-  const { setFilters, order, setOrder, orderBy, setOrderBy } =
-    useContext(TableContext);
+const THeaderTop = ({ activeTable }: { activeTable: string }) => {
+  const {
+    setFiltersTopTable,
+    orderTopTable,
+    setOrderTopTable,
+    orderByTopTable,
+    setOrderByTopTable,
+  } = useContext(TableContext);
+
+  console.log(activeTable);
 
   const { headColumnData, rcspan } = getTableState(activeTable);
 
   const handleColumnSort = (property: any) => {
-    const isAsc = orderBy === property && order === "asc";
+    const isAsc = orderByTopTable === property && orderTopTable === "asc";
     const newOrder = isAsc ? "desc" : "asc";
 
     if (["asc", "desc"].includes(newOrder)) {
-      setOrder(newOrder);
-      setOrderBy(property);
+      setOrderTopTable(newOrder);
+      setOrderByTopTable(property);
     }
   };
 
   const handleFilterChange =
     (column: any) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      setFilters((filters: any) => ({
+      setFiltersTopTable((filters: any) => ({
         ...filters,
         [column]: event.target.value,
       }));
@@ -53,9 +60,11 @@ const THeader = ({ activeTable }: { activeTable: string }) => {
           >
             {column.sort ? (
               <TableSortLabel
-                active={orderBy === column.name}
+                active={orderByTopTable === column.name}
                 direction={
-                  orderBy === column.name ? (order as "asc" | "desc") : "asc"
+                  orderByTopTable === column.name
+                    ? (orderTopTable as "asc" | "desc")
+                    : "asc"
                 }
               >
                 {column.label}
@@ -107,4 +116,4 @@ const THeader = ({ activeTable }: { activeTable: string }) => {
   );
 };
 
-export default THeader;
+export default THeaderTop;

@@ -2,27 +2,32 @@ import TableContext from "@/context/cabinet/TableContext";
 import { TablePagination } from "@mui/material";
 import { useContext } from "react";
 
-const TPagination = () => {
-  const { page, setPage, rowsPerPage, setRowsPerPage } =
-    useContext(TableContext);
+const TPaginationTop = ({ activeTable }: { activeTable: string }) => {
+  const {
+    rowsTopTable,
+    pageTopTable,
+    setPageTopTable,
+    rowsPerPageTopTable,
+    setRowsPerPageTopTable,
+  } = useContext(TableContext);
 
   const handleChangePage = (event: any, newPage: number) => {
-    setPage(newPage);
+    setPageTopTable(newPage);
   };
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
+    setRowsPerPageTopTable(+event.target.value);
+    setPageTopTable(0);
   };
   return (
     <TablePagination
       component="div"
-      count={10} //rows.length
-      page={page}
+      count={rowsTopTable.length} //rows.length
+      page={pageTopTable}
       onPageChange={handleChangePage}
-      rowsPerPage={rowsPerPage}
+      rowsPerPage={rowsPerPageTopTable}
       onRowsPerPageChange={handleChangeRowsPerPage}
       labelRowsPerPage="Рядків на сторінці"
       sx={{ userSelect: "none" }}
@@ -30,4 +35,4 @@ const TPagination = () => {
   );
 };
 
-export default TPagination;
+export default TPaginationTop;

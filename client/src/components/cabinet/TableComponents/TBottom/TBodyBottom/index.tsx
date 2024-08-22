@@ -1,14 +1,17 @@
-import { getDataTableById } from "@/api/table";
-import { modifyTableData } from "@/context/cabinet/modifyTableData";
 import { TableBody, TableRow, TableCell } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import TableContext from "@/context/cabinet/TableContext";
 import { getTableState } from "@/store/TableState";
-import ActionButtons from "../ActionButtons";
+import ActionButtons from "../../CommonComponents/ActionButtons";
+import { applyFilters, compare } from "../../CommonComponents/tfunctions";
 
-const TBodyButtom = ({ activeTable }: { activeTable: string }) => {
-  const { filters, order, orderBy } = useContext(TableContext);
-  const [rows, setRows] = useState([]);
+const TBodyBottom = ({ activeTable }: { activeTable: string }) => {
+  const {
+    rowsBottomTable,
+    filtersBottomTable,
+    orderBottomTable,
+    orderByBottomTable,
+  } = useContext(TableContext);
 
   const [selectedRowNumber, setSelectedRowNumber] = useState<number | null>(
     null
@@ -16,27 +19,9 @@ const TBodyButtom = ({ activeTable }: { activeTable: string }) => {
 
   const { exceptionKeyColumn } = getTableState(activeTable);
 
-  const applyFilters = (row: any) =>
-    Object.keys(filters).every((key) =>
-      filters[key]
-        ? String(row[key]).toLowerCase().includes(filters[key].toLowerCase())
-        : true
-    );
-
-  const compare = (a: any, b: any) => {
-    if (order === "asc") {
-      return a[orderBy] > b[orderBy] ? 1 : -1;
-    }
-    return a[orderBy] < b[orderBy] ? 1 : -1;
-  };
-
-  const sortedAndFilteredRows = rows.filter(applyFilters).sort(compare);
-
-  useEffect(() => {
-    getDataTableById(activeTable, 1)
-      .then(({ data }) => setRows(modifyTableData(data)))
-      .catch(() => setRows([]));
-  }, [activeTable]);
+  const sortedAndFilteredRows = rowsBottomTable
+    .filter((row) => applyFilters(row, filtersBottomTable))
+    .sort((a, b) => compare(a, b, orderBottomTable, orderByBottomTable));
 
   return (
     <TableBody>
@@ -63,4 +48,4 @@ const TBodyButtom = ({ activeTable }: { activeTable: string }) => {
   );
 };
 
-export default TBodyButtom;
+export default TBodyBottom;

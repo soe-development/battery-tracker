@@ -2,7 +2,7 @@ import { TableCell, IconButton, TableRow } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useState } from "react";
-import ActionButtons from "../ActionButtons";
+import ActionButtons from "./ActionButtons";
 
 const TRowExpandble = ({ children, row, activeTable }: any) => {
   const [isExpanded, setIsExpanded] = useState(false);

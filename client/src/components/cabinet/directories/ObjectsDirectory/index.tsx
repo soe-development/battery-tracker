@@ -16,7 +16,7 @@ const ObjectsDirectory = () => {
   return (
     <Box>
       <Typography variant="h6" className="titleTypography">
-        Довідник об'єктів
+        Довідник об&apos;єктів
       </Typography>
       <Divider />
       <Paper className="wrapperButtons">
@@ -27,7 +27,11 @@ const ObjectsDirectory = () => {
           Оновити таблицю
         </Button>
       </Paper>
-      {activeTable ? <TWrapper /> : <LinearProgress />}
+      {activeTable ? (
+        <TWrapper topTable={activeTable} bottomTable={false} />
+      ) : (
+        <LinearProgress />
+      )}
     </Box>
   );
 };

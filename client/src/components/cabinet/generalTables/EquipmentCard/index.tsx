@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import { useContext } from "react";
 import TWrapper from "../../TableComponents/TWrapper";
-import BatteryReplacement from "./BatteryReplacement";
 
 const EquipmentCard = () => {
   const { activeTable } = useContext(TableContext);
@@ -30,7 +29,10 @@ const EquipmentCard = () => {
       </Paper>
       {activeTable ? (
         <Box sx={{ display: "grid", height: 10 }}>
-          <TWrapper bottomTable={"battery-replacement"} />
+          <TWrapper
+            topTable={activeTable}
+            bottomTable={"battery-replacement"}
+          />
         </Box>
       ) : (
         <LinearProgress />

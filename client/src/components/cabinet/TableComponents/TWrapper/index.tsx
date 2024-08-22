@@ -1,13 +1,20 @@
 import React, { useRef, useEffect, useState, useContext } from "react";
 import { Box, TableContainer, Paper, Table } from "@mui/material";
-import THeader from "../THeader";
-import TPagination from "../TPagination";
+import TPagination from "../TTop/TPaginationTop";
+import TBodyTop from "../TTop/TBodyTop";
+import TBodyBottom from "../TBottom/TBodyBottom";
+import THeaderTop from "../TTop/THeaderTop";
 import TableContext from "@/context/cabinet/TableContext";
-import TBodyTop from "../TBodyTop";
-import TBodyButtom from "../TBodyButtom";
+import THeaderBottom from "../TBottom/THeaderBottom";
 
-const TWrapper = ({ bottomTable }: { bottomTable: string | boolean }) => {
-  const { activeTable } = useContext(TableContext);
+const TWrapper = ({
+  topTable,
+  bottomTable,
+}: {
+  topTable: string;
+  bottomTable: string | boolean;
+}) => {
+  const { refetchTable, refetchTableById } = useContext(TableContext);
   const tableContainer1Ref = useRef<HTMLDivElement>(null);
   const tableContainer2Ref = useRef<HTMLDivElement>(null);
   const resizerRef = useRef<HTMLDivElement>(null);
@@ -71,6 +78,16 @@ const TWrapper = ({ bottomTable }: { bottomTable: string | boolean }) => {
     return () => resizer?.removeEventListener("mousedown", startResize);
   }, []);
 
+  useEffect(() => {
+    refetchTable(topTable);
+  }, [refetchTable, topTable]);
+
+  useEffect(() => {
+    if (typeof bottomTable === "string") {
+      refetchTableById(bottomTable, 1);
+    }
+  }, [refetchTableById, bottomTable]);
+
   return (
     <Box sx={{ p: 1, maxHeight: "70vh" }} className="table-wrapper">
       <TableContainer
@@ -83,12 +100,12 @@ const TWrapper = ({ bottomTable }: { bottomTable: string | boolean }) => {
         }}
       >
         <Table stickyHeader aria-label="sticky table">
-          <THeader activeTable={activeTable} />
-          <TBodyTop activeTable={activeTable} />
+          <THeaderTop activeTable={topTable} />
+          <TBodyTop activeTable={topTable} />
         </Table>
       </TableContainer>
       <Box ref={resizerRef}>
-        <TPagination />
+        <TPagination activeTable={topTable} />
       </Box>
       {bottomTable && (
         <TableContainer
@@ -101,8 +118,8 @@ const TWrapper = ({ bottomTable }: { bottomTable: string | boolean }) => {
           }}
         >
           <Table stickyHeader aria-label="sticky table">
-            <THeader activeTable={bottomTable as string} />
-            <TBodyButtom activeTable={bottomTable as string} />
+            <THeaderBottom activeTable={bottomTable as string} />
+            <TBodyBottom activeTable={bottomTable as string} />
           </Table>
         </TableContainer>
       )}
