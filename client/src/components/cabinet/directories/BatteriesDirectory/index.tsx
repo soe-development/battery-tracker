@@ -1,12 +1,10 @@
 import {
   Box,
   Button,
-  CircularProgress,
   Divider,
   LinearProgress,
   Paper,
   Typography,
-  styled,
 } from "@mui/material";
 import TWrapper from "../../TableComponents/TWrapper";
 import TableContext from "@/context/cabinet/TableContext";
@@ -29,7 +27,11 @@ const BatteriesDirectory = () => {
           Оновити таблицю
         </Button>
       </Paper>
-      {activeTable ? <TWrapper /> : <LinearProgress />}
+      {activeTable ? (
+        <TWrapper topTable={activeTable} bottomTable={false} />
+      ) : (
+        <LinearProgress />
+      )}
     </Box>
   );
 };

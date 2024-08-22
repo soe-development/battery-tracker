@@ -27,7 +27,16 @@ const ReceivingDirectory = () => {
           Оновити таблицю
         </Button>
       </Paper>
-      {activeTable ? <TWrapper /> : <LinearProgress />}
+      {activeTable ? (
+        <Box sx={{ display: "grid", height: 10 }}>
+          <TWrapper
+            topTable={activeTable}
+            bottomTable={"battery-replacement"}
+          />
+        </Box>
+      ) : (
+        <LinearProgress />
+      )}
     </Box>
   );
 };

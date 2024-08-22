@@ -27,7 +27,11 @@ const UpsModelsDirectory = () => {
           Оновити таблицю
         </Button>
       </Paper>
-      {activeTable ? <TWrapper /> : <LinearProgress />}
+      {activeTable ? (
+        <TWrapper topTable={activeTable} bottomTable={false} />
+      ) : (
+        <LinearProgress />
+      )}
     </Box>
   );
 };
