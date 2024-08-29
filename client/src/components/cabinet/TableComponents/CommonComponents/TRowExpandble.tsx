@@ -35,7 +35,7 @@ const TRowExpandble = ({ children, row, activeTable }: any) => {
             <TableCell sx={{ textAlign: "center" }}>{index + 1}</TableCell>
             <TableCell>{item.name}</TableCell>
             <TableCell sx={{ padding: "4px 15px", fontSize: 16 }}>
-              <ActionButtons activeTable={activeTable} />
+              <ActionButtons activeTable={activeTable} row={row} />
             </TableCell>
           </TableRow>
         ))}

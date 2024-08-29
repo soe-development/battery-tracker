@@ -18,8 +18,6 @@ const THeaderTop = ({ activeTable }: { activeTable: string }) => {
     setOrderByTopTable,
   } = useContext(TableContext);
 
-  console.log(activeTable);
-
   const { headColumnData, rcspan } = getTableState(activeTable);
 
   const handleColumnSort = (property: any) => {
@@ -39,10 +37,6 @@ const THeaderTop = ({ activeTable }: { activeTable: string }) => {
         [column]: event.target.value,
       }));
     };
-
-  useEffect(() => {
-    console.log(headColumnData);
-  }, [headColumnData]);
 
   return (
     <TableHead>

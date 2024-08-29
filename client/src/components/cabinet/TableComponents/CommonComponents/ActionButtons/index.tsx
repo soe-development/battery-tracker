@@ -5,13 +5,18 @@ import CancelButton from "./CancelButton";
 import EditButton from "./EditButton";
 import DeleteButton from "./DeleteButton";
 
-const ActionButtons = ({ activeTable }: { activeTable: string }) => {
-  console.log(activeTable);
+const ActionButtons = ({
+  activeTable,
+  row,
+}: {
+  activeTable: string;
+  row: [];
+}) => {
   const { actionMode } = getTableState(activeTable);
   const isEditMode = false;
 
   return actionMode === "add" ? (
-    <AddButton />
+    <AddButton row={row} />
   ) : isEditMode ? (
     <>
       <SaveButton />

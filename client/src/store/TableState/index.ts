@@ -11,6 +11,7 @@ export const tabs = [
 
 const tableState = {
   "batteries-directory": {
+    name: "Довідник АКБ",
     headColumnData: [
       {
         name: "rowNumber",
@@ -58,8 +59,10 @@ const tableState = {
     rcspan: false,
     expandbleRow: false,
     actionMode: "modify",
+    staticHeight: 288,
   },
   "districts-directory": {
+    name: "Довідник структурних підрозділів",
     headColumnData: [
       {
         name: "expander",
@@ -97,8 +100,10 @@ const tableState = {
     rcspan: false,
     expandbleRow: true,
     actionMode: "modify",
+    staticHeight: 288,
   },
   "objects-directory": {
+    name: "Довідник об'єктів",
     headColumnData: [
       {
         name: "rowNumber",
@@ -157,8 +162,10 @@ const tableState = {
     rcspan: false,
     expandbleRow: false,
     actionMode: "modify",
+    staticHeight: 288,
   },
   "other-equipment-directory": {
+    name: "Довідник іншого обладнання",
     headColumnData: [
       {
         name: "rowNumber",
@@ -236,8 +243,10 @@ const tableState = {
     rcspan: false,
     expandbleRow: false,
     actionMode: "modify",
+    staticHeight: 288,
   },
   "ups-models-directory": {
+    name: "Довідник моделей ДБЖ",
     headColumnData: [
       {
         name: "rowNumber",
@@ -295,6 +304,15 @@ const tableState = {
         maxWidth: 100,
       },
       {
+        name: "object",
+        label: "Об'єкт розміщення",
+        initial: null,
+        filter: true,
+        sort: true,
+        width: 100,
+        maxWidth: 100,
+      },
+      {
         name: "actions",
         label: "Дії",
         initial: null,
@@ -309,6 +327,10 @@ const tableState = {
       "batteriesDirectoryId",
       "otherEquipmentDirectoryId",
       "dateOfLastBatteryReplacement",
+      "districtsDirectoryId",
+      "branchesDirectoryId",
+      "upsModelsDirectoryid",
+      "objectsDirectoryId",
     ],
     initialFilters: {
       id: null,
@@ -319,8 +341,10 @@ const tableState = {
     rcspan: false,
     expandbleRow: false,
     actionMode: "modify",
+    staticHeight: 288,
   },
   "total-table": {
+    name: "Облік заміни АКБ",
     headColumnData: [
       {
         name: "rowNumber",
@@ -385,8 +409,8 @@ const tableState = {
         sort: true,
         colspan: 1,
         rowspan: 2,
-        width: 60,
-        maxWidth: 60,
+        width: 80,
+        maxWidth: 80,
       },
       {
         name: "inventoryNumber",
@@ -418,19 +442,8 @@ const tableState = {
         sort: true,
         colspan: 1,
         rowspan: 2,
-        width: 110,
-        maxWidth: 110,
-      },
-      {
-        name: "actions",
-        label: "Дії",
-        initial: null,
-        filter: false,
-        sort: false,
-        colspan: 1,
-        rowspan: 2,
-        width: 20,
-        maxWidth: 20,
+        width: 120,
+        maxWidth: 120,
       },
     ],
 
@@ -441,6 +454,7 @@ const tableState = {
       "districtId",
       "objectId",
       "equipmentCardId",
+      "actions",
     ],
     initialFilters: {
       id: null,
@@ -455,8 +469,10 @@ const tableState = {
     rcspan: true,
     expandbleRow: false,
     actionMode: "modify",
+    staticHeight: 236,
   },
   "receiving-batteries": {
+    name: "Отримання АКБ",
     headColumnData: [
       {
         name: "rowNumber",
@@ -532,7 +548,7 @@ const tableState = {
         width: 100,
       },
     ],
-    exceptionKeyColumn: ["id", "batteriesDirectoryId"],
+    exceptionKeyColumn: ["id", "batteriesDirectoryId", "receiptId"],
 
     initialFilters: {
       id: null,
@@ -547,8 +563,10 @@ const tableState = {
     rcspan: false,
     expandbleRow: false,
     actionMode: "add",
+    staticHeight: 288,
   },
   "equipment-card": {
+    name: "Картка обладнання",
     headColumnData: [
       {
         name: "rowNumber",
@@ -583,8 +601,8 @@ const tableState = {
         initial: null,
         filter: false,
         sort: true,
-        width: 50,
-        maxWidth: 50,
+        width: 70,
+        maxWidth: 70,
       },
       {
         name: "typeBattery",
@@ -592,8 +610,8 @@ const tableState = {
         initial: null,
         filter: true,
         sort: true,
-        width: 130,
-        maxWidth: 130,
+        width: 160,
+        maxWidth: 160,
       },
       {
         name: "numberOfBatteries",
@@ -601,8 +619,8 @@ const tableState = {
         initial: null,
         filter: false,
         sort: true,
-        width: 80,
-        maxWidth: 80,
+        width: 100,
+        maxWidth: 100,
       },
       {
         name: "yearProductionUPS",
@@ -610,8 +628,8 @@ const tableState = {
         initial: null,
         filter: true,
         sort: true,
-        width: 90,
-        maxWidth: 90,
+        width: 100,
+        maxWidth: 100,
       },
       {
         name: "inventoryNumber",
@@ -619,8 +637,8 @@ const tableState = {
         initial: null,
         filter: true,
         sort: true,
-        width: 100,
-        maxWidth: 100,
+        width: 150,
+        maxWidth: 150,
       },
       {
         name: "s_n",
@@ -628,8 +646,8 @@ const tableState = {
         initial: null,
         filter: false,
         sort: true,
-        width: 50,
-        maxWidth: 50,
+        width: 40,
+        maxWidth: 40,
       },
       {
         name: "apcs",
@@ -670,8 +688,10 @@ const tableState = {
     rcspan: false,
     expandbleRow: false,
     actionMode: "add",
+    staticHeight: 288,
   },
   "battery-replacement": {
+    name: "Заміна АКБ",
     headColumnData: [
       {
         name: "rowNumber",
@@ -715,6 +735,7 @@ const tableState = {
       "upsModelsDirectoryId",
       "batteriesDirectoryId",
       "otherEquipmentDirectoryId",
+      "receiptId",
     ],
     initialFilters: {
       id: null,
@@ -725,6 +746,113 @@ const tableState = {
     rcspan: false,
     expandbleRow: false,
     actionMode: "modify",
+    staticHeight: 288,
+    newRow: {},
+  },
+  "expenses-table": {
+    name: "Витрати",
+    headColumnData: [
+      {
+        name: "rowNumber",
+        label: "№",
+        initial: null,
+        filter: false,
+        sort: true,
+        colspan: 1,
+        rowspan: 2,
+        width: 20,
+        maxWidth: 20,
+      },
+      {
+        name: "object",
+        label: "Об'єкт",
+        initial: null,
+        filter: false,
+        sort: false,
+        colspan: 3,
+        rowspan: 1,
+        width: 50,
+        maxWidth: 50,
+      },
+      {
+        name: "producer",
+        label: "Виробник",
+        initial: null,
+        filter: true,
+        sort: true,
+        colspan: 1,
+        rowspan: 2,
+        width: 100,
+        maxWidth: 100,
+      },
+      {
+        name: "model",
+        label: "Модель",
+        initial: null,
+        filter: true,
+        sort: true,
+        colspan: 1,
+        rowspan: 2,
+        width: 60,
+        maxWidth: 60,
+      },
+      {
+        name: "voltage",
+        label: "Потужність",
+        initial: null,
+        filter: false,
+        sort: true,
+        colspan: 1,
+        rowspan: 2,
+        width: 50,
+        maxWidth: 50,
+      },
+      {
+        name: "numberOfBatteries",
+        label: "К-сть АКБ",
+        initial: null,
+        filter: false,
+        sort: true,
+        colspan: 1,
+        rowspan: 2,
+        width: 60,
+        maxWidth: 60,
+      },
+      {
+        name: "inventoryNumber",
+        label: "Інвентарний номер",
+        initial: null,
+        filter: false,
+        sort: true,
+        colspan: 1,
+        rowspan: 2,
+        width: 100,
+        maxWidth: 100,
+      },
+    ],
+    exceptionKeyColumn: [
+      "id",
+      "upsModelsDirectoryId",
+      "batteriesDirectoryId",
+      "districtId",
+      "objectId",
+      "equipmentCardId",
+      "actions",
+    ],
+    initialFilters: {
+      id: null,
+      producer: null,
+      model: null,
+      voltage: null,
+      numberOfBatteries: null,
+      inventoryNumber: null,
+      typeBattery: null,
+      dateOfLastBatteryReplacement: null,
+    },
+    rcspan: true,
+    expandbleRow: false,
+    actionMode: "modify",
+    staticHeight: 236,
   },
 };
 

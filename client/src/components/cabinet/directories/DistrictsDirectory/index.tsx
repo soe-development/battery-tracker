@@ -11,7 +11,7 @@ import { useContext } from "react";
 import TWrapper from "../../TableComponents/TWrapper";
 
 const DistrictsDirectory = () => {
-  const { activeTable } = useContext(TableContext);
+  const { activeTable, refetchTable } = useContext(TableContext);
 
   return (
     <Box>
@@ -21,9 +21,18 @@ const DistrictsDirectory = () => {
       <Divider />
       <Paper className="wrapperButtons">
         <Button variant="contained" className="addButton">
-          Додати запис
+          Додати філію
         </Button>
-        <Button variant="contained" className="updateButton">
+        <Button variant="contained" className="addButton">
+          Додати структурний підрозділ
+        </Button>
+        <Button
+          variant="contained"
+          className="updateButton"
+          onClick={() => {
+            refetchTable;
+          }}
+        >
           Оновити таблицю
         </Button>
       </Paper>

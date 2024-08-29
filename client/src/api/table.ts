@@ -3,7 +3,7 @@ import api from "./api";
 export const getDataTable = async (name: string) => {
   console.log(process.env.API_URL + `/${name}/find`);
   const { data } = await api.get(process.env.API_URL + `/${name}/find`);
-
+  console.log(data);
   return data;
 };
 

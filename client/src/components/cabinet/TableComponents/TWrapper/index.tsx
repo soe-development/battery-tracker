@@ -1,11 +1,14 @@
 import React, { useRef, useEffect, useState, useContext } from "react";
-import { Box, TableContainer, Paper, Table } from "@mui/material";
+import { Box, TableContainer, Paper, Table, Typography } from "@mui/material";
 import TPagination from "../TTop/TPaginationTop";
 import TBodyTop from "../TTop/TBodyTop";
 import TBodyBottom from "../TBottom/TBodyBottom";
 import THeaderTop from "../TTop/THeaderTop";
 import TableContext from "@/context/cabinet/TableContext";
 import THeaderBottom from "../TBottom/THeaderBottom";
+import { getTableState } from "@/store/TableState";
+import ClearButton from "../CommonComponents/ActionButtons/ClearButton";
+import CreateButton from "../CommonComponents/ActionButtons/CreateButton";
 
 const TWrapper = ({
   topTable,
@@ -14,18 +17,27 @@ const TWrapper = ({
   topTable: string;
   bottomTable: string | boolean;
 }) => {
-  const { refetchTable, refetchTableById } = useContext(TableContext);
+  const { refetchTable, refetchTableById, activeAddId } =
+    useContext(TableContext);
   const tableContainer1Ref = useRef<HTMLDivElement>(null);
   const tableContainer2Ref = useRef<HTMLDivElement>(null);
   const resizerRef = useRef<HTMLDivElement>(null);
   const [tableHeight, setTableHeight] = useState<number>(0);
 
+  const { staticHeight } = getTableState(topTable);
+  const {
+    name: nameBottomTable,
+    exceptionKeyColumn: bottomTableExceptionKeyColumn,
+  } = bottomTable
+    ? getTableState(bottomTable as string)
+    : { name: "", exceptionKeyColumn: [] };
+
   useEffect(() => {
     const updateInitialHeight = () => {
       const windowHeight = window.innerHeight;
       const newTableHeight = bottomTable
-        ? (windowHeight - 307) / 2
-        : windowHeight - 307;
+        ? (windowHeight - (staticHeight || 288)) / 2
+        : windowHeight - (staticHeight || 288);
       setTableHeight(newTableHeight);
       if (tableContainer1Ref.current) {
         tableContainer1Ref.current.style.height = `${newTableHeight}px`;
@@ -38,7 +50,7 @@ const TWrapper = ({
     updateInitialHeight();
     window.addEventListener("resize", updateInitialHeight);
     return () => window.removeEventListener("resize", updateInitialHeight);
-  }, [bottomTable]);
+  }, [bottomTable, staticHeight]);
 
   useEffect(() => {
     const resizer = resizerRef.current;
@@ -84,9 +96,10 @@ const TWrapper = ({
 
   useEffect(() => {
     if (typeof bottomTable === "string") {
-      refetchTableById(bottomTable, 1);
+      refetchTableById(bottomTable);
     }
   }, [refetchTableById, bottomTable]);
+  console.log(bottomTable);
 
   return (
     <Box sx={{ p: 1, maxHeight: "70vh" }} className="table-wrapper">
@@ -117,6 +130,57 @@ const TWrapper = ({
             height: `${tableHeight}px`,
           }}
         >
+          <Box
+            sx={{
+              backgroundColor: "primary.light",
+              borderBottom: "1px solid #e0e0e0",
+              borderLeft: "1px solid #e0e0e0",
+              borderRight: "1px solid #e0e0e0",
+              display: "flex",
+              borderRadius: 0,
+            }}
+          >
+            <Box
+              sx={{
+                alignContent: "center",
+                px: 2,
+                borderRight: "1px solid #e0e0e0",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontWeight: 600,
+                }}
+              >
+                {nameBottomTable}
+              </Typography>
+            </Box>
+            {activeAddId > 0 && (
+              <>
+                {!bottomTableExceptionKeyColumn?.includes("actions") && (
+                  <Box
+                    sx={{
+                      borderRight: "1px solid #e0e0e0",
+                      p: "4px",
+                      alignContent: "center",
+                    }}
+                  >
+                    <CreateButton />
+                  </Box>
+                )}
+
+                <Box
+                  sx={{
+                    borderRight: "1px solid #e0e0e0",
+                    p: "4px",
+                    alignContent: "center",
+                  }}
+                >
+                  <ClearButton />
+                </Box>
+              </>
+            )}
+          </Box>
           <Table stickyHeader aria-label="sticky table">
             <THeaderBottom activeTable={bottomTable as string} />
             <TBodyBottom activeTable={bottomTable as string} />

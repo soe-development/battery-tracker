@@ -31,6 +31,9 @@ interface ITableContext {
   orderTopTable: string;
   setOrderTopTable: Dispatch<SetStateAction<string>>;
 
+  activeAddId: number;
+  setActiveAddId: Dispatch<SetStateAction<number>>;
+
   // Состояния для нижней таблицы
   rowsBottomTable: any[];
   setRowsBottomTable: Dispatch<SetStateAction<any[]>>;
@@ -45,9 +48,12 @@ interface ITableContext {
   orderBottomTable: string;
   setOrderBottomTable: Dispatch<SetStateAction<string>>;
 
+  newRowBottomTable: any;
+  setNewRowBottomTable: Dispatch<SetStateAction<any>>;
+
   refetchTable: (activeTable: string) => Promise<void>;
 
-  refetchTableById: (activeTable: string, id: number) => Promise<void>;
+  refetchTableById: (activeTable: string) => Promise<void>;
 }
 
 const TableContext = createContext<ITableContext>({
@@ -67,6 +73,9 @@ const TableContext = createContext<ITableContext>({
   orderTopTable: "asc",
   setOrderTopTable: () => {},
 
+  activeAddId: 0,
+  setActiveAddId: () => {},
+
   // Нижняя таблица
   rowsBottomTable: [],
   setRowsBottomTable: () => [],
@@ -80,6 +89,9 @@ const TableContext = createContext<ITableContext>({
   setOrderByBottomTable: () => {},
   orderBottomTable: "asc",
   setOrderBottomTable: () => {},
+
+  newRowBottomTable: {},
+  setNewRowBottomTable: () => {},
 
   refetchTable: async () => {},
   refetchTableById: async () => {},
@@ -100,8 +112,11 @@ export const TableContextProvider: FC<PropsWithChildren> = ({ children }) => {
   const [orderByTopTable, setOrderByTopTable] = useState<string>("rowNumber");
   const [orderTopTable, setOrderTopTable] = useState<string>("asc");
 
+  const [activeAddId, setActiveAddId] = useState<number>(0);
+
   // Состояния для нижней таблицы
   const [rowsBottomTable, setRowsBottomTable] = useState<any[]>([]);
+  console.log(rowsBottomTable);
   const [filtersBottomTable, setFiltersBottomTable] = useState(
     getTableState(tab).initialFilters
   );
@@ -111,7 +126,10 @@ export const TableContextProvider: FC<PropsWithChildren> = ({ children }) => {
     useState<string>("rowNumber");
   const [orderBottomTable, setOrderBottomTable] = useState<string>("asc");
 
+  const [newRowBottomTable, setNewRowBottomTable] = useState<any>(false);
+
   const refetchTable = useCallback(async (activeTable: string) => {
+    console.log(activeTable);
     try {
       const { data } = await getDataTable(activeTable);
       setRowsTopTable(modifyTableData(data));
@@ -121,15 +139,15 @@ export const TableContextProvider: FC<PropsWithChildren> = ({ children }) => {
   }, []);
 
   const refetchTableById = useCallback(
-    async (activeTable: string, id: number) => {
+    async (activeTable: string) => {
       try {
-        const { data } = await getDataTableById(activeTable, id);
+        const { data } = await getDataTableById(activeTable, activeAddId);
         setRowsBottomTable(modifyTableData(data));
       } catch {
         setRowsBottomTable([]);
       }
     },
-    []
+    [activeAddId]
   );
 
   return (
@@ -149,6 +167,9 @@ export const TableContextProvider: FC<PropsWithChildren> = ({ children }) => {
         orderTopTable,
         setOrderTopTable,
 
+        activeAddId,
+        setActiveAddId,
+
         rowsBottomTable,
         setRowsBottomTable,
         filtersBottomTable,
@@ -161,6 +182,9 @@ export const TableContextProvider: FC<PropsWithChildren> = ({ children }) => {
         setOrderByBottomTable,
         orderBottomTable,
         setOrderBottomTable,
+
+        newRowBottomTable,
+        setNewRowBottomTable,
 
         refetchTable,
         refetchTableById,

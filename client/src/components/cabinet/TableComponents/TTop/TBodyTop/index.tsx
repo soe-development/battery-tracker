@@ -39,7 +39,7 @@ const TBodyTop = ({ activeTable }: { activeTable: string }) => {
               <Typography sx={{ fontWeight: 600 }}>{row.name}</Typography>
             </TableCell>
             <TableCell>
-              <ActionButtons activeTable={activeTable} />
+              <ActionButtons activeTable={activeTable} row={row} />
             </TableCell>
           </TRowExpandble>
         ) : (
@@ -56,9 +56,11 @@ const TBodyTop = ({ activeTable }: { activeTable: string }) => {
                   {row[key]}
                 </TableCell>
               ))}
-            <TableCell sx={{ padding: "4px 15px", fontSize: 16 }}>
-              <ActionButtons activeTable={activeTable} />
-            </TableCell>
+            {!exceptionKeyColumn?.includes("actions") && (
+              <TableCell sx={{ padding: "4px 15px", fontSize: 16 }}>
+                <ActionButtons activeTable={activeTable} row={row} />
+              </TableCell>
+            )}
           </TableRow>
         )
       )}

@@ -5,18 +5,19 @@ import {
   TableRow,
   TableCell,
   TableSortLabel,
-  TextField,
+  Button,
 } from "@mui/material";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 
 const THeaderBottom = ({ activeTable }: { activeTable: string }) => {
   const {
-    setFiltersBottomTable,
     orderBottomTable,
     setOrderBottomTable,
     orderByBottomTable,
     setOrderByBottomTable,
   } = useContext(TableContext);
+
+  console.log(activeTable);
 
   const { headColumnData, rcspan } = getTableState(activeTable);
 
@@ -30,21 +31,11 @@ const THeaderBottom = ({ activeTable }: { activeTable: string }) => {
     }
   };
 
-  const handleFilterChange =
-    (column: any) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      setFiltersBottomTable((filters: any) => ({
-        ...filters,
-        [column]: event.target.value,
-      }));
-    };
-
-  useEffect(() => {
-    console.log(headColumnData);
-  }, [headColumnData]);
+  console.log(headColumnData.length, activeTable);
 
   return (
     <TableHead>
-      <TableRow className="tableRowUpper">
+      <TableRow className="tableRowUpper" sx={{ p: "0 !important" }}>
         {headColumnData?.map((column: any) => (
           <TableCell
             key={column.name}
@@ -86,30 +77,6 @@ const THeaderBottom = ({ activeTable }: { activeTable: string }) => {
           </TableCell>
         </TableRow>
       )}
-
-      <TableRow
-        className="tableRowFilter"
-        sx={{ top: rcspan ? "66px !important" : "inherit" }}
-      >
-        {headColumnData?.map((column: any) => (
-          <TableCell
-            key={column.name + "filter"}
-            sx={{ maxWidth: column.maxWidth }}
-            className="tableCellLower"
-            colSpan={column.colspan}
-          >
-            {column.filter && (
-              <TextField
-                key={column.name + "inputFilter"}
-                size="small"
-                label={"Пошук по " + column.label}
-                className={"filterTextField"}
-                onChange={handleFilterChange(column.name)}
-              />
-            )}
-          </TableCell>
-        ))}
-      </TableRow>
     </TableHead>
   );
 };

@@ -5,7 +5,7 @@ const themeOptions: ThemeOptions = {
     primary: {
       main: "#4f6b9a",
       dark: "#41658f",
-      light: "#4f6b9a",
+      light: "#f1f4fa",
     },
     secondary: {
       main: "#c4c4c4",

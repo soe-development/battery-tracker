@@ -29,10 +29,7 @@ const ReceivingDirectory = () => {
       </Paper>
       {activeTable ? (
         <Box sx={{ display: "grid", height: 10 }}>
-          <TWrapper
-            topTable={activeTable}
-            bottomTable={"battery-replacement"}
-          />
+          <TWrapper topTable={activeTable} bottomTable={"expenses-table"} />
         </Box>
       ) : (
         <LinearProgress />
