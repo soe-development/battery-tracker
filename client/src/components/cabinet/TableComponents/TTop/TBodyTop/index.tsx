@@ -3,7 +3,7 @@ import { useContext, useState } from "react";
 import TableContext from "@/context/cabinet/TableContext";
 import { getTableState } from "@/store/TableState";
 import ActionButtons from "../../CommonComponents/ActionButtons";
-import { applyFilters, compare } from "../../CommonComponents/tfunctions";
+import { applyFilters, compare } from "../../../../../utils/tfunctions";
 import TRowExpandble from "../../CommonComponents/TRowExpandble";
 
 const TBodyTop = ({ activeTable }: { activeTable: string }) => {
@@ -14,6 +14,7 @@ const TBodyTop = ({ activeTable }: { activeTable: string }) => {
     rowsPerPageTopTable,
     orderTopTable,
     orderByTopTable,
+    newRow,
   } = useContext(TableContext);
 
   const [selectedRowNumber, setSelectedRowNumber] = useState<number | null>(
@@ -39,7 +40,7 @@ const TBodyTop = ({ activeTable }: { activeTable: string }) => {
               <Typography sx={{ fontWeight: 600 }}>{row.name}</Typography>
             </TableCell>
             <TableCell>
-              <ActionButtons activeTable={activeTable} />
+              <ActionButtons activeTable={activeTable} row={row} />
             </TableCell>
           </TRowExpandble>
         ) : (
@@ -56,9 +57,11 @@ const TBodyTop = ({ activeTable }: { activeTable: string }) => {
                   {row[key]}
                 </TableCell>
               ))}
-            <TableCell sx={{ padding: "4px 15px", fontSize: 16 }}>
-              <ActionButtons activeTable={activeTable} />
-            </TableCell>
+            {!exceptionKeyColumn?.includes("actions") && (
+              <TableCell sx={{ padding: "4px 15px", fontSize: 16 }}>
+                <ActionButtons activeTable={activeTable} row={row} />
+              </TableCell>
+            )}
           </TableRow>
         )
       )}

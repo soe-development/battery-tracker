@@ -1,12 +1,5 @@
 import TableContext from "@/context/cabinet/TableContext";
-import {
-  Box,
-  Typography,
-  Divider,
-  Paper,
-  Button,
-  LinearProgress,
-} from "@mui/material";
+import { Box, Typography, Divider, Paper, LinearProgress } from "@mui/material";
 import { useContext } from "react";
 import TWrapper from "../../TableComponents/TWrapper";
 
@@ -19,14 +12,7 @@ const TotalTable = () => {
         Облік заміни АКБ
       </Typography>
       <Divider />
-      <Paper className="wrapperButtons">
-        <Button variant="contained" className="addButton">
-          Додати запис
-        </Button>
-        <Button variant="contained" className="updateButton">
-          Оновити таблицю
-        </Button>
-      </Paper>
+      <Paper className="wrapperButtons"></Paper>
       {activeTable ? (
         <Box sx={{ display: "grid", height: 10 }}>
           <TWrapper topTable={activeTable} bottomTable={false} />

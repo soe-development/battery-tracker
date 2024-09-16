@@ -37,7 +37,10 @@ export const UserContextProvider: FC<IUserContextProviderProps> = ({
 
   const refetchUser = useCallback(() => {
     getUser()
-      .then((user) => setUser(user))
+      .then((user) => {
+        console.log(user);
+        setUser(user);
+      })
       .catch(() => setUser(null));
   }, []);
 

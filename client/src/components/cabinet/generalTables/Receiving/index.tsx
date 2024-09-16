@@ -11,7 +11,7 @@ import { useContext } from "react";
 import TWrapper from "../../TableComponents/TWrapper";
 
 const ReceivingDirectory = () => {
-  const { activeTable } = useContext(TableContext);
+  const { activeTable, setNewRow } = useContext(TableContext);
 
   return (
     <Box>
@@ -20,7 +20,13 @@ const ReceivingDirectory = () => {
       </Typography>
       <Divider />
       <Paper className="wrapperButtons">
-        <Button variant="contained" className="addButton">
+        <Button
+          variant="contained"
+          className="addButton"
+          onClick={() => {
+            setNewRow({ status: true, name: "receiving-batteries" });
+          }}
+        >
           Додати запис
         </Button>
         <Button variant="contained" className="updateButton">
@@ -29,10 +35,7 @@ const ReceivingDirectory = () => {
       </Paper>
       {activeTable ? (
         <Box sx={{ display: "grid", height: 10 }}>
-          <TWrapper
-            topTable={activeTable}
-            bottomTable={"battery-replacement"}
-          />
+          <TWrapper topTable={activeTable} bottomTable={"expenses-table"} />
         </Box>
       ) : (
         <LinearProgress />
