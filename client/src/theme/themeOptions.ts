@@ -212,6 +212,14 @@ const themeOptions: ThemeOptions = {
         },
       },
     },
+    MuiModal: {
+      styleOverrides: {
+        root: {
+          border: 1,
+          borderRadius: 2,
+        },
+      },
+    },
   },
 };
 

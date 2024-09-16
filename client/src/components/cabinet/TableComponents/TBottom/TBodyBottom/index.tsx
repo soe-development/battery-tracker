@@ -3,8 +3,7 @@ import { useContext, useState } from "react";
 import TableContext from "@/context/cabinet/TableContext";
 import { getTableState } from "@/store/TableState";
 import ActionButtons from "../../CommonComponents/ActionButtons";
-import { applyFilters, compare } from "../../CommonComponents/tfunctions";
-import TNewRow from "./TNewRow";
+import { applyFilters, compare } from "../../../../../utils/tfunctions";
 
 const TBodyBottom = ({ activeTable }: { activeTable: string }) => {
   const {
@@ -48,7 +47,6 @@ const TBodyBottom = ({ activeTable }: { activeTable: string }) => {
           )}
         </TableRow>
       ))}
-      {newRowBottomTable && <TNewRow />}
     </TableBody>
   );
 };

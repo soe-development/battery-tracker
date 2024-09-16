@@ -17,7 +17,7 @@ const TWrapper = ({
   topTable: string;
   bottomTable: string | boolean;
 }) => {
-  const { refetchTable, refetchTableById, activeAddId } =
+  const { refetchTable, refetchTableById, activeAddId, newRow } =
     useContext(TableContext);
   const tableContainer1Ref = useRef<HTMLDivElement>(null);
   const tableContainer2Ref = useRef<HTMLDivElement>(null);
@@ -25,6 +25,7 @@ const TWrapper = ({
   const [tableHeight, setTableHeight] = useState<number>(0);
 
   const { staticHeight } = getTableState(topTable);
+
   const {
     name: nameBottomTable,
     exceptionKeyColumn: bottomTableExceptionKeyColumn,
@@ -92,14 +93,13 @@ const TWrapper = ({
 
   useEffect(() => {
     refetchTable(topTable);
-  }, [refetchTable, topTable]);
+  }, [refetchTable, topTable, newRow]);
 
   useEffect(() => {
     if (typeof bottomTable === "string") {
       refetchTableById(bottomTable);
     }
-  }, [refetchTableById, bottomTable]);
-  console.log(bottomTable);
+  }, [refetchTableById, bottomTable, newRow]);
 
   return (
     <Box sx={{ p: 1, maxHeight: "70vh" }} className="table-wrapper">
@@ -165,7 +165,7 @@ const TWrapper = ({
                       alignContent: "center",
                     }}
                   >
-                    <CreateButton />
+                    <CreateButton name={bottomTable as string} />
                   </Box>
                 )}
 

@@ -17,8 +17,6 @@ const THeaderBottom = ({ activeTable }: { activeTable: string }) => {
     setOrderByBottomTable,
   } = useContext(TableContext);
 
-  console.log(activeTable);
-
   const { headColumnData, rcspan } = getTableState(activeTable);
 
   const handleColumnSort = (property: any) => {
@@ -30,8 +28,6 @@ const THeaderBottom = ({ activeTable }: { activeTable: string }) => {
       setOrderByBottomTable(property);
     }
   };
-
-  console.log(headColumnData.length, activeTable);
 
   return (
     <TableHead>

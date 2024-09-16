@@ -11,7 +11,7 @@ import { useContext } from "react";
 import TWrapper from "../../TableComponents/TWrapper";
 
 const EquipmentCard = () => {
-  const { activeTable } = useContext(TableContext);
+  const { activeTable, setNewRow } = useContext(TableContext);
 
   return (
     <Box>
@@ -20,7 +20,13 @@ const EquipmentCard = () => {
       </Typography>
       <Divider />
       <Paper className="wrapperButtons">
-        <Button variant="contained" className="addButton">
+        <Button
+          variant="contained"
+          className="addButton"
+          onClick={() => {
+            setNewRow({ status: true, name: "equipment-card" });
+          }}
+        >
           Додати запис
         </Button>
         <Button variant="contained" className="updateButton">

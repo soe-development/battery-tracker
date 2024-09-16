@@ -5,13 +5,27 @@ import {
   LinearProgress,
   Paper,
   Typography,
+  Modal,
 } from "@mui/material";
 import TWrapper from "../../TableComponents/TWrapper";
 import TableContext from "@/context/cabinet/TableContext";
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import ModalWindow from "../../TableComponents/CommonComponents/ModalWindow";
+
+const style = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
 const BatteriesDirectory = () => {
-  const { activeTable } = useContext(TableContext);
+  const { activeTable, setNewRow } = useContext(TableContext);
 
   return (
     <Box>
@@ -20,7 +34,13 @@ const BatteriesDirectory = () => {
       </Typography>
       <Divider />
       <Paper className="wrapperButtons">
-        <Button variant="contained" className="addButton">
+        <Button
+          variant="contained"
+          className="addButton"
+          onClick={() => {
+            setNewRow({ status: true, name: "batteries-directory" });
+          }}
+        >
           Додати запис
         </Button>
         <Button variant="contained" className="updateButton">

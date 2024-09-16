@@ -3,7 +3,7 @@ import { useContext, useState } from "react";
 import TableContext from "@/context/cabinet/TableContext";
 import { getTableState } from "@/store/TableState";
 import ActionButtons from "../../CommonComponents/ActionButtons";
-import { applyFilters, compare } from "../../CommonComponents/tfunctions";
+import { applyFilters, compare } from "../../../../../utils/tfunctions";
 import TRowExpandble from "../../CommonComponents/TRowExpandble";
 
 const TBodyTop = ({ activeTable }: { activeTable: string }) => {
@@ -14,6 +14,7 @@ const TBodyTop = ({ activeTable }: { activeTable: string }) => {
     rowsPerPageTopTable,
     orderTopTable,
     orderByTopTable,
+    newRow,
   } = useContext(TableContext);
 
   const [selectedRowNumber, setSelectedRowNumber] = useState<number | null>(

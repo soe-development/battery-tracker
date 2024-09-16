@@ -7,4 +7,10 @@ type TableState = {
   expandbleRow?: boolean;
   actionMode?: string;
   staticHeight?: number;
+  newRow?: any;
+  newRowStartRequest?: any;
 };
+
+interface Field {
+  value: any;
+}

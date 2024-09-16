@@ -11,7 +11,7 @@ import { useContext } from "react";
 import TWrapper from "../../TableComponents/TWrapper";
 
 const DistrictsDirectory = () => {
-  const { activeTable, refetchTable } = useContext(TableContext);
+  const { activeTable, refetchTable, setNewRow } = useContext(TableContext);
 
   return (
     <Box>
@@ -20,10 +20,22 @@ const DistrictsDirectory = () => {
       </Typography>
       <Divider />
       <Paper className="wrapperButtons">
-        <Button variant="contained" className="addButton">
+        <Button
+          variant="contained"
+          className="addButton"
+          onClick={() => {
+            setNewRow({ status: true, name: "branches-directory" });
+          }}
+        >
           Додати філію
         </Button>
-        <Button variant="contained" className="addButton">
+        <Button
+          variant="contained"
+          className="addButton"
+          onClick={() => {
+            setNewRow({ status: true, name: "districts-directory" });
+          }}
+        >
           Додати структурний підрозділ
         </Button>
         <Button

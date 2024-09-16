@@ -2,7 +2,7 @@ import { AuthContext } from "@/context/AuthContext";
 import { Box, Button } from "@mui/material";
 import { useContext } from "react";
 import { useRouter } from "next/navigation";
-import { isNotEmptyField } from "./validation";
+import { isNotEmptyField } from "../../utils/validation";
 import { requestLogIn } from "@/api/auth";
 import UserContext from "@/context/UserContext";
 
