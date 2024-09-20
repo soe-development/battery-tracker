@@ -1,10 +1,10 @@
 import { Button } from "@mui/material";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
+import TableContext from "@/context/cabinet/TableContext";
+import { useContext } from "react";
 
-const CancelButton = ({ setNewRow }: any) => {
-  const handleClick = () => {
-    setNewRow({ status: false, name: "" });
-  };
+const CancelButton = () => {
+  const { setEditRow } = useContext(TableContext);
 
   return (
     <Button
@@ -12,7 +12,9 @@ const CancelButton = ({ setNewRow }: any) => {
       size="small"
       className="rowModifyButtons rowRedButton"
       startIcon={<CancelOutlinedIcon />}
-      onClick={handleClick}
+      onClick={() => {
+        setEditRow({ status: false, name: "", row: {} });
+      }}
     />
   );
 };

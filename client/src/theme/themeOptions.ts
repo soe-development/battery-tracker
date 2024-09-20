@@ -23,7 +23,7 @@ const themeOptions: ThemeOptions = {
       light: "#577C61",
     },
     warning: {
-      main: "#d32f2f",
+      main: "#de3434",
     },
   },
   typography: {
@@ -78,9 +78,9 @@ const themeOptions: ThemeOptions = {
               zIndex: 1,
             },
             "&.Mui-selected": {
-              backgroundColor: "#d5dae3",
+              backgroundColor: "#e3e8f1",
               "&:hover": {
-                backgroundColor: "#c4cddd",
+                backgroundColor: "#e3e8f1",
               },
             },
           },

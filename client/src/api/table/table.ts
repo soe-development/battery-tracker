@@ -29,14 +29,18 @@ export const createEntry = async (name: string, sendData: any) => {
   return data;
 };
 
-export const deleteEntry = async (name: string) => {
-  const { data } = await api.get(process.env.API_URL + `/${name}/delete`);
+export const deleteEntry = async (name: string, id: number) => {
+  console.log(process.env.API_URL + `/${name}/delete`);
+  console.log(name, id);
+  const { data } = await api.post(process.env.API_URL + `/${name}/delete`, {
+    id: id,
+  });
 
   return data;
 };
 
 export const editEntry = async (name: string, sendData: any) => {
-  const { data } = await api.post(process.env.API_URL + `/${name}/edit`, {
+  const { data } = await api.post(process.env.API_URL + `/${name}/update`, {
     data: sendData,
   });
 

@@ -11,7 +11,8 @@ import { useContext } from "react";
 import TWrapper from "../../TableComponents/TWrapper";
 
 const UpsModelsDirectory = () => {
-  const { activeTable, setNewRow } = useContext(TableContext);
+  const { activeTable, setNewRow, setUpdate, editRow } =
+    useContext(TableContext);
 
   return (
     <Box>
@@ -29,10 +30,20 @@ const UpsModelsDirectory = () => {
               name: "ups-models-directory",
             });
           }}
+          disabled={editRow.status}
         >
           Додати запис
         </Button>
-        <Button variant="contained" className="updateButton">
+        <Button
+          variant="contained"
+          className="updateButton"
+          onClick={() => {
+            setUpdate((prev: boolean) => {
+              return !prev;
+            });
+          }}
+          disabled={editRow.status}
+        >
           Оновити таблицю
         </Button>
       </Paper>

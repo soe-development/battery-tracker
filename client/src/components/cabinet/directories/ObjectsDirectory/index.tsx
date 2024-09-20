@@ -9,10 +9,10 @@ import {
 } from "@mui/material";
 import { useContext } from "react";
 import TWrapper from "../../TableComponents/TWrapper";
-import ModalWindow from "../../TableComponents/CommonComponents/ModalWindow";
 
 const ObjectsDirectory = () => {
-  const { activeTable, setNewRow } = useContext(TableContext);
+  const { activeTable, setNewRow, setUpdate, editRow } =
+    useContext(TableContext);
 
   return (
     <Box>
@@ -27,10 +27,20 @@ const ObjectsDirectory = () => {
           onClick={() => {
             setNewRow({ status: true, name: "objects-directory" });
           }}
+          disabled={editRow.status}
         >
           Додати запис
         </Button>
-        <Button variant="contained" className="updateButton">
+        <Button
+          variant="contained"
+          className="updateButton"
+          onClick={() => {
+            setUpdate((prev: boolean) => {
+              return !prev;
+            });
+          }}
+          disabled={editRow.status}
+        >
           Оновити таблицю
         </Button>
       </Paper>

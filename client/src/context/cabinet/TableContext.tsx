@@ -17,6 +17,9 @@ import { getData, getDataById } from "@/api/table/table";
 interface ITableContext {
   activeTable: string;
 
+  update: boolean;
+  setUpdate: Dispatch<SetStateAction<boolean>>;
+
   // Состояния для верхней таблицы
   rowsTopTable: any[];
   setRowsTopTable: Dispatch<SetStateAction<any[]>>;
@@ -34,11 +37,14 @@ interface ITableContext {
   newRow: any;
   setNewRow: Dispatch<SetStateAction<any>>;
 
-  helperText: any;
-  setHelperText: Dispatch<SetStateAction<any>>;
+  editRow: any;
+  setEditRow: Dispatch<SetStateAction<any>>;
 
   openSnackbar: boolean;
   setOpenSnackbar: Dispatch<SetStateAction<boolean>>;
+
+  snackbarState: any;
+  setSnackbarState: Dispatch<SetStateAction<any>>;
 
   activeAddId: number;
   setActiveAddId: Dispatch<SetStateAction<number>>;
@@ -68,6 +74,9 @@ interface ITableContext {
 const TableContext = createContext<ITableContext>({
   activeTable: "",
 
+  update: true,
+  setUpdate: () => {},
+
   // Верхняя таблица
   rowsTopTable: [],
   setRowsTopTable: () => [],
@@ -85,11 +94,14 @@ const TableContext = createContext<ITableContext>({
   newRow: {},
   setNewRow: () => {},
 
-  helperText: {},
-  setHelperText: () => {},
+  editRow: {},
+  setEditRow: () => {},
 
   openSnackbar: false,
   setOpenSnackbar: () => {},
+
+  snackbarState: {},
+  setSnackbarState: () => {},
 
   activeAddId: 0,
   setActiveAddId: () => {},
@@ -120,6 +132,8 @@ export const TableContextProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const [activeTable] = useState<string>(tab);
 
+  const [update, setUpdate] = useState<boolean>(true);
+
   // Состояния для верхней таблицы
   const [rowsTopTable, setRowsTopTable] = useState<any[]>([]);
   const [filtersTopTable, setFiltersTopTable] = useState(
@@ -135,9 +149,19 @@ export const TableContextProvider: FC<PropsWithChildren> = ({ children }) => {
     name: "",
   });
 
-  const [helperText, setHelperText] = useState<any>("");
+  const [editRow, setEditRow] = useState<any>({
+    status: false,
+    name: "",
+    row: {},
+  });
 
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
+
+  const [snackbarState, setSnackbarState] = useState<any>({
+    type: "",
+    mainText: "",
+    helperText: "",
+  });
 
   const [activeAddId, setActiveAddId] = useState<number>(0);
 
@@ -182,6 +206,8 @@ export const TableContextProvider: FC<PropsWithChildren> = ({ children }) => {
     <TableContext.Provider
       value={{
         activeTable,
+        update,
+        setUpdate,
         rowsTopTable,
         setRowsTopTable,
         filtersTopTable,
@@ -198,8 +224,11 @@ export const TableContextProvider: FC<PropsWithChildren> = ({ children }) => {
         newRow,
         setNewRow,
 
-        helperText,
-        setHelperText,
+        editRow,
+        setEditRow,
+
+        snackbarState,
+        setSnackbarState,
 
         openSnackbar,
         setOpenSnackbar,

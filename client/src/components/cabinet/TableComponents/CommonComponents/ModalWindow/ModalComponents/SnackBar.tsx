@@ -3,7 +3,7 @@ import { Snackbar, Alert, Typography } from "@mui/material";
 import { useContext } from "react";
 
 const SnackBar = () => {
-  const { helperText, openSnackbar, setOpenSnackbar } =
+  const { snackbarState, openSnackbar, setOpenSnackbar } =
     useContext(TableContext);
   return (
     <Snackbar
@@ -14,7 +14,7 @@ const SnackBar = () => {
         position: "absolute",
         left: 0,
         right: 0,
-        bottom: 0, // Поднимет Snackbar на 10% от нижней части модального окна
+        bottom: 0,
         maxHeight: "50px",
         "& .MuiPaper-root": {
           minHeight: "30px",
@@ -22,11 +22,22 @@ const SnackBar = () => {
         },
       }}
     >
-      <Alert onClose={() => setOpenSnackbar(false)} severity="error">
-        <Typography>Не всі обов&apos;язкові поля заповнені! </Typography>
+      <Alert
+        onClose={() => setOpenSnackbar(false)}
+        severity={snackbarState.type}
+        sx={{
+          backgroundColor:
+            snackbarState.type === "success" ? "success.main" : "warning.main",
+          color:
+            snackbarState.type === "success"
+              ? "secondary.light"
+              : "secondary.light",
+        }}
+        variant="standard"
+      >
         <Typography>
-          Поля, які не заповнені:{" "}
-          <span style={{ fontWeight: 600 }}>{helperText}</span>{" "}
+          {snackbarState.mainText}{" "}
+          <span style={{ fontWeight: 600 }}>{snackbarState.helperText}</span>{" "}
         </Typography>
       </Alert>
     </Snackbar>

@@ -9,6 +9,7 @@ type TableState = {
   staticHeight?: number;
   newRow?: any;
   newRowStartRequest?: any;
+  editableFields?: any;
 };
 
 interface Field {

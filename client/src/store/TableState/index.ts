@@ -88,6 +88,7 @@ const tableState = {
         },
       ],
     },
+    editableFields: ["typeBattery", "a_h"],
   },
   "districts-directory": {
     name: "Довідник структурних підрозділів",
@@ -159,6 +160,7 @@ const tableState = {
     newRowSelect: {
       Філія: { value: [] },
     },
+    editableFields: ["name"],
   },
   "branches-directory": {
     name: "Філія",
@@ -188,6 +190,7 @@ const tableState = {
         value: "",
       },
     ],
+    editableFields: ["name"],
   },
   "objects-directory": {
     name: "Довідник об'єктів",
@@ -296,6 +299,7 @@ const tableState = {
         },
       ],
     },
+    editableFields: ["objectName", "voltage"],
   },
   "other-equipment-directory": {
     name: "Довідник іншого обладнання",
@@ -432,6 +436,7 @@ const tableState = {
         },
       ],
     },
+    editableFields: ["producer", "model", "numberOfBatteries"],
   },
   "ups-models-directory": {
     name: "Довідник моделей ДБЖ",
@@ -624,6 +629,7 @@ const tableState = {
         },
       ],
     },
+    editableFields: ["power"],
   },
   "total-table": {
     name: "Облік заміни АКБ",
@@ -756,6 +762,7 @@ const tableState = {
     newRow: {
       "total-table": [],
     },
+    editableFields: [],
   },
   "receiving-batteries": {
     name: "Отримання АКБ",
@@ -920,6 +927,7 @@ const tableState = {
         },
       ],
     },
+    editableFields: [],
   },
   "equipment-card": {
     name: "Картка обладнання",
@@ -1064,6 +1072,7 @@ const tableState = {
         },
       ],
     },
+    editableFields: [],
   },
   "battery-replacement": {
     name: "Заміна АКБ",
@@ -1163,6 +1172,7 @@ const tableState = {
         },
       ],
     },
+    editableFields: ["numberOfBatteries"],
   },
   "expenses-table": {
     name: "Витрати",
@@ -1270,6 +1280,7 @@ const tableState = {
     staticHeight: 236,
     newRowStartRequest: false,
     newRow: [],
+    editableFields: [],
   },
 };
 

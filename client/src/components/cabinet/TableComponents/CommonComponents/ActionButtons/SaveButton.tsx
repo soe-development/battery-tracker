@@ -1,9 +1,66 @@
 import { Button } from "@mui/material";
 import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
+import TableContext from "@/context/cabinet/TableContext";
+import { useContext } from "react";
+import { editEntry } from "@/api/table/table";
+import { getTableState } from "@/store/TableState";
+import { isNotEmptyField } from "@/utils/validation";
 
-const SaveButton = ({ setNewRow }: any) => {
+const SaveButton = () => {
+  const { editRow, setEditRow, setUpdate, setSnackbarState, setOpenSnackbar } =
+    useContext(TableContext);
+
+  const { editableFields, headColumnData } = getTableState(editRow.name);
+
+  const validateFields = (updatedRow: any) => {
+    const errors: string[] = [];
+    const isValid = Object.entries(updatedRow).every(([key, value]) => {
+      if (!editableFields.includes(key)) return true;
+
+      const fieldInfo = headColumnData.find(
+        (element: any) => element.name === key
+      );
+      if (!isNotEmptyField(value as string)) {
+        errors.push(fieldInfo.label);
+        return false;
+      }
+      return true;
+    });
+
+    return { isValid, errors };
+  };
+
   const handleClick = () => {
-    setNewRow({ status: false, name: "" });
+    const updatedRow = { ...editRow.row };
+    delete updatedRow.rowNumber;
+
+    const { isValid, errors } = validateFields(updatedRow);
+
+    if (isValid) {
+      editEntry(editRow.name, updatedRow).then(() => {
+        setEditRow({ status: false, name: "", row: {} });
+        setUpdate((prev) => !prev);
+
+        setSnackbarState({
+          type: "success",
+          mainText: "Дані успішно збережено!",
+          helperText: "",
+        });
+        setOpenSnackbar(true);
+      });
+    } else {
+      setSnackbarState({
+        type: "error",
+        mainText: (
+          <>
+            Не всі обов&apos;язкові поля заповнені! <br /> Поля, які не
+            заповнені:
+          </>
+        ),
+        helperText: errors.join("; ") + ";",
+      });
+      setOpenSnackbar(true);
+    }
   };
 
   return (

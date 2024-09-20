@@ -11,7 +11,8 @@ import { useContext } from "react";
 import TWrapper from "../../TableComponents/TWrapper";
 
 const ReceivingDirectory = () => {
-  const { activeTable, setNewRow } = useContext(TableContext);
+  const { activeTable, setNewRow, setUpdate, editRow } =
+    useContext(TableContext);
 
   return (
     <Box>
@@ -26,10 +27,20 @@ const ReceivingDirectory = () => {
           onClick={() => {
             setNewRow({ status: true, name: "receiving-batteries" });
           }}
+          disabled={editRow.status}
         >
           Додати запис
         </Button>
-        <Button variant="contained" className="updateButton">
+        <Button
+          variant="contained"
+          className="updateButton"
+          onClick={() => {
+            setUpdate((prev: boolean) => {
+              return !prev;
+            });
+          }}
+          disabled={editRow.status}
+        >
           Оновити таблицю
         </Button>
       </Paper>
