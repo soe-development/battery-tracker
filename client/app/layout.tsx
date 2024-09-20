@@ -6,7 +6,7 @@ import { CssBaseline } from "@mui/material";
 
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
   const user = await getUser()
-    .then((user) => user)
+    .then((response: any) => response.user)
     .catch(() => null);
 
   return (

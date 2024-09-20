@@ -164,7 +164,37 @@ const tableState = {
   },
   "branches-directory": {
     name: "Філія",
+    headColumnData: [
+      {
+        name: "expander",
+        label: "",
+        initial: null,
+        filter: false,
+        sort: false,
+        width: 20,
+        maxWidth: 20,
+      },
+      {
+        name: "name",
+        label: "Філія",
+        initial: null,
+        filter: true,
+        sort: true,
+        width: "auto",
+        maxWidth: 60,
+      },
+      {
+        name: "actions",
+        label: "Дії",
+        initial: null,
+        filter: false,
+        sort: false,
+        width: "auto",
+        maxWidth: 60,
+      },
+    ],
     newRowStartRequest: true,
+
     newRow: {
       "branches-directory": [
         {

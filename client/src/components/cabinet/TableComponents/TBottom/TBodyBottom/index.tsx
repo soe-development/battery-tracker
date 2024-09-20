@@ -25,8 +25,6 @@ const TBodyBottom = ({ activeTable }: { activeTable: string }) => {
     .filter((row) => applyFilters(row, filtersBottomTable))
     .sort((a, b) => compare(a, b, orderBottomTable, orderByBottomTable));
 
-  console.log(editRow);
-
   return (
     <TableBody>
       {sortedAndFilteredRows.map((row: any, index: number) => (

@@ -1,3 +1,4 @@
+import { requestLogOut } from "@/api/auth";
 import UserContext from "@/context/UserContext";
 import {
   Box,
@@ -11,7 +12,7 @@ import {
 import { useContext, useState } from "react";
 
 const UserIcon = () => {
-  const { user } = useContext(UserContext);
+  const { user, clearUser } = useContext(UserContext);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const handleOpenUserMenu = (event: any) => {
@@ -48,7 +49,11 @@ const UserIcon = () => {
         open={Boolean(anchorElUser)}
         onClose={handleCloseUserMenu}
       >
-        <MenuItem>
+        <MenuItem
+          onClick={() => {
+            clearUser();
+          }}
+        >
           <Typography textAlign="center">Вийти</Typography>
         </MenuItem>
       </Menu>

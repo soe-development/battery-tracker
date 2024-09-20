@@ -19,3 +19,9 @@ export const getUser = async () => {
 
   return data;
 };
+
+export const requestLogOut = async () => {
+  const { data } = await api.post(process.env.API_URL + "/auth/logout");
+
+  return data;
+};
