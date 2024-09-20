@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Req, Res } from '@nestjs/common';
+import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { TotalService } from './total.service';
+import { AuthGuard } from 'src/modules/auth/auth.middleware';
 
 @Controller('total-table')
+@UseGuards(AuthGuard)
 export class TotalController {
   constructor(
     private readonly jwtService: JwtService,
@@ -42,11 +44,6 @@ export class TotalController {
   @Get('find')
   async get(@Req() request: any, @Res() response: any) {
     try {
-      // const { token } = request.body;
-      // const dataToken = await this.jwtService.verifyAsync(token);
-      // if (!dataToken) {
-      //   response.status(401).json({ status: 401, result: 'Not authorized' });
-      // } else {
       const data = await this.totalService.find();
 
       response.status(200).json({
@@ -54,7 +51,6 @@ export class TotalController {
         status: 200,
         message: 'Successful find',
       });
-      // }
     } catch (error) {
       response.status(401).json({ status: 401, message: 'Not authorized' });
     }

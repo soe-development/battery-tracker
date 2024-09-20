@@ -1,6 +1,7 @@
 "use client";
-import { getUser } from "@/api/auth";
+import { getUser, requestLogOut } from "@/api/auth";
 import { IUser } from "@/types/user";
+import { useRouter } from "next/navigation";
 import {
   createContext,
   FC,
@@ -29,17 +30,21 @@ export const UserContextProvider: FC<IUserContextProviderProps> = ({
   user: initialUser,
   children,
 }) => {
+  const router = useRouter();
+
   const [user, setUser] = useState(initialUser || null);
 
   const clearUser = useCallback(() => {
-    setUser(null);
-  }, []);
+    requestLogOut().then(() => {
+      setUser(null);
+      router.push("/auth");
+    });
+  }, [router]);
 
   const refetchUser = useCallback(() => {
     getUser()
-      .then((user) => {
-        console.log(user);
-        setUser(user);
+      .then((response: any) => {
+        setUser(response.user);
       })
       .catch(() => setUser(null));
   }, []);

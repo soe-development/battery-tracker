@@ -1,10 +1,12 @@
-import { Controller, Get, Post, Req, Res } from '@nestjs/common';
+import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { EquipmentCardService } from './equipment-card.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UPSModelsDirectoryService } from 'src/modules/directories/ups-models-directory/ups-models-directory.service';
+import { AuthGuard } from 'src/modules/auth/auth.middleware';
 
 @Controller('equipment-card')
+@UseGuards(AuthGuard)
 export class EquipmentCardController {
   constructor(
     private readonly jwtService: JwtService,
@@ -35,11 +37,6 @@ export class EquipmentCardController {
   @Get('find')
   async getCommonData(@Req() request: any, @Res() response: any) {
     try {
-      // const { token } = request.body;
-      // const dataToken = await this.jwtService.verifyAsync(token);
-      // if (!dataToken) {
-      //   response.status(401).json({ status: 401, result: 'Not authorized' });
-      // } else {
       const data = await this.equipmentCardService.findCommonData();
 
       response.status(200).json({
@@ -47,7 +44,6 @@ export class EquipmentCardController {
         status: 200,
         message: 'Successful find',
       });
-      // }
     } catch (error) {
       response.status(401).json({ status: 401, message: 'Not authorized' });
     }
@@ -56,12 +52,6 @@ export class EquipmentCardController {
   @Get('findCreateData')
   async getCreateData(@Req() request: any, @Res() response: any) {
     try {
-      // const { token } = request.body;
-      // const dataToken = await this.jwtService.verifyAsync(token);
-      // if (!dataToken) {
-      //   response.status(401).json({ status: 401, result: 'Not authorize' });
-      // } else {
-
       const upsModelsDirectory = await this.upsModelsDirectoryService.find();
 
       const data = [
@@ -90,7 +80,6 @@ export class EquipmentCardController {
         status: 200,
         message: 'Successful find',
       });
-      //}
     } catch (error) {
       response.status(401).json({ status: 401, message: 'Not authorized' });
     }
@@ -119,27 +108,6 @@ export class EquipmentCardController {
       response.status(401).json({ status: 401, message: 'Not authorized' });
     }
   }
-
-  // @Post('find')
-  // async get(@Req() request: any, @Res() response: any) {
-  //   try {
-  //     const { token } = request.body;
-  //     const dataToken = await this.jwtService.verifyAsync(token);
-  //     if (!dataToken) {
-  //       response.status(401).json({ status: 401, result: 'Not authorized' });
-  //     } else {
-  //       const findData = await this.equipmentCardService.find();
-
-  //       response.status(200).json({
-  //         findData: findData,
-  //         status: 200,
-  //         message: 'Successful find',
-  //       });
-  //     }
-  //   } catch (error) {
-  //     response.status(401).json({ status: 401, message: 'Not authorized' });
-  //   }
-  // }
 
   @Post('delete')
   async delete(@Req() request: any, @Res() response: any) {

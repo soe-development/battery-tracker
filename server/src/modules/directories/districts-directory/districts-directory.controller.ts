@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Req, Res } from '@nestjs/common';
+import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { DistrictsDirectoryService } from './districts-directory.service';
 import { BranchesDirectoryService } from '../branches-directory/branches-directory.service';
+import { AuthGuard } from 'src/modules/auth/auth.middleware';
 
 @Controller('districts-directory')
+@UseGuards(AuthGuard)
 export class DistrictsDirectoryController {
   constructor(
     private readonly jwtService: JwtService,

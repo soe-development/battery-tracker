@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Req, Res } from '@nestjs/common';
+import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { OtherEquipmentDirectoryService } from './other-equipment-directory.service';
 import { BatteriesDirectoryService } from '../batteries-directory/batteries-directory.service';
+import { AuthGuard } from 'src/modules/auth/auth.middleware';
 
 @Controller('other-equipment-directory')
+@UseGuards(AuthGuard)
 export class OtherEquipmentDirectoryController {
   constructor(
     private readonly jwtService: JwtService,
@@ -39,11 +41,6 @@ export class OtherEquipmentDirectoryController {
   @Get('find')
   async get(@Req() request: any, @Res() response: any) {
     try {
-      // const { token } = request.body;
-      // const dataToken = await this.jwtService.verifyAsync(token);
-      // if (!dataToken) {
-      //   response.status(401).json({ status: 401, result: 'Not authorized' });
-      // } else {
       const data = await this.otherEquipmentDirectoryService.find();
 
       response.status(200).json({
@@ -51,7 +48,6 @@ export class OtherEquipmentDirectoryController {
         status: 200,
         message: 'Successful find',
       });
-      // }
     } catch (error) {
       response.status(401).json({ status: 401, message: 'Not authorized' });
     }
@@ -60,12 +56,6 @@ export class OtherEquipmentDirectoryController {
   @Get('findCreateData')
   async getCreateData(@Req() request: any, @Res() response: any) {
     try {
-      // const { token } = request.body;
-      // const dataToken = await this.jwtService.verifyAsync(token);
-      // if (!dataToken) {
-      //   response.status(401).json({ status: 401, result: 'Not authorize' });
-      // } else {
-
       const batteriesDirectory = await this.batteriesDirectoryService.find();
 
       const data = [
@@ -82,7 +72,6 @@ export class OtherEquipmentDirectoryController {
         status: 200,
         message: 'Successful find',
       });
-      //}
     } catch (error) {
       response.status(401).json({ status: 401, message: 'Not authorized' });
     }

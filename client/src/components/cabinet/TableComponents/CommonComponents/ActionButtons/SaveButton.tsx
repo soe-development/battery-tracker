@@ -12,6 +12,8 @@ const SaveButton = () => {
 
   const { editableFields, headColumnData } = getTableState(editRow.name);
 
+  console.log(editRow.name);
+
   const validateFields = (updatedRow: any) => {
     const errors: string[] = [];
     const isValid = Object.entries(updatedRow).every(([key, value]) => {
@@ -20,6 +22,7 @@ const SaveButton = () => {
       const fieldInfo = headColumnData.find(
         (element: any) => element.name === key
       );
+
       if (!isNotEmptyField(value as string)) {
         errors.push(fieldInfo.label);
         return false;

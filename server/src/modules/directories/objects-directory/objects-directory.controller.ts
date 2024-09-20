@@ -1,10 +1,12 @@
-import { Controller, Get, Post, Req, Res } from '@nestjs/common';
+import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ObjectsDirectoryService } from './objects-directory.service';
 import { DistrictsDirectoryService } from '../districts-directory/districts-directory.service';
 import { BranchesDirectoryService } from '../branches-directory/branches-directory.service';
+import { AuthGuard } from 'src/modules/auth/auth.middleware';
 
 @Controller('objects-directory')
+@UseGuards(AuthGuard)
 export class ObjectsDirectoryController {
   constructor(
     private readonly jwtService: JwtService,
@@ -16,12 +18,6 @@ export class ObjectsDirectoryController {
   @Post('create')
   async create(@Req() request: any, @Res() response: any) {
     try {
-      // const { token } = request.body;
-      // const dataToken = await this.jwtService.verifyAsync(token);
-      // if (!dataToken) {
-      //   response.status(401).json({ status: 401, result: 'Not authorized' });
-      // } else {
-
       const { data } = request.body;
       const result = await this.objectsDirectoryService.create({
         name: data[2].value,
@@ -36,7 +32,6 @@ export class ObjectsDirectoryController {
       } else {
         response.status(501).json({ status: 501, result: 'Created failed' });
       }
-      //}
     } catch (error) {
       response.status(401).json({ status: 401, result: 'Not authorized' });
     }
@@ -45,18 +40,12 @@ export class ObjectsDirectoryController {
   @Get('find')
   async get(@Req() request: any, @Res() response: any) {
     try {
-      // const { token } = request.body;
-      // const dataToken = await this.jwtService.verifyAsync(token);
-      // if (!dataToken) {
-      //   response.status(401).json({ status: 401, result: 'Not authorized' });
-      // } else {
       const data = await this.objectsDirectoryService.find();
       response.status(200).json({
         data: data,
         status: 200,
         message: 'Successful find',
       });
-      // }
     } catch (error) {
       response.status(401).json({ status: 401, message: 'Not authorized' });
     }
@@ -65,11 +54,6 @@ export class ObjectsDirectoryController {
   @Get('findCreateData')
   async getCreateData(@Req() request: any, @Res() response: any) {
     try {
-      // const { token } = request.body;
-      // const dataToken = await this.jwtService.verifyAsync(token);
-      // if (!dataToken) {
-      //   response.status(401).json({ status: 401, result: 'Not authorize' });
-      // } else {
       const branches = await this.brachesDirectoryService.find();
 
       const districtsDirectory =
@@ -91,7 +75,6 @@ export class ObjectsDirectoryController {
         status: 200,
         message: 'Successful find',
       });
-      // }
     } catch (error) {
       response.status(401).json({ status: 401, message: 'Not authorized' });
     }
