@@ -3,7 +3,7 @@ import { Button } from "@mui/material";
 import { useContext } from "react";
 
 const CreateButton = ({ name }: { name: string }) => {
-  const { setNewRow } = useContext(TableContext);
+  const { newRow, setNewRow, editRow } = useContext(TableContext);
 
   return (
     <Button
@@ -13,6 +13,7 @@ const CreateButton = ({ name }: { name: string }) => {
       onClick={() => {
         setNewRow({ status: true, name: name });
       }}
+      disabled={newRow.status || editRow.status}
     >
       Додати запис
     </Button>

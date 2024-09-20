@@ -3,7 +3,7 @@ import { Button } from "@mui/material";
 import { useContext } from "react";
 
 const ClearButton = () => {
-  const { setActiveAddId } = useContext(TableContext);
+  const { setActiveAddId, newRow, editRow } = useContext(TableContext);
   const handleClick = () => {
     setActiveAddId(0);
   };
@@ -13,6 +13,7 @@ const ClearButton = () => {
       className={"rowRedButton"}
       sx={{ backgroundColor: "secondary.light", m: "0 !important" }}
       onClick={handleClick}
+      disabled={newRow.status || editRow.status}
     >
       Очистити
     </Button>

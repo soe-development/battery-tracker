@@ -25,7 +25,8 @@ const style = {
 };
 
 const BatteriesDirectory = () => {
-  const { activeTable, setNewRow } = useContext(TableContext);
+  const { activeTable, setNewRow, setUpdate, editRow } =
+    useContext(TableContext);
 
   return (
     <Box>
@@ -40,10 +41,20 @@ const BatteriesDirectory = () => {
           onClick={() => {
             setNewRow({ status: true, name: "batteries-directory" });
           }}
+          disabled={editRow.status}
         >
           Додати запис
         </Button>
-        <Button variant="contained" className="updateButton">
+        <Button
+          variant="contained"
+          className="updateButton"
+          onClick={() => {
+            setUpdate((prev: boolean) => {
+              return !prev;
+            });
+          }}
+          disabled={editRow.status}
+        >
           Оновити таблицю
         </Button>
       </Paper>

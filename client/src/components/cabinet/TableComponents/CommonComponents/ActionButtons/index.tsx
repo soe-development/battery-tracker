@@ -4,16 +4,25 @@ import SaveButton from "./SaveButton";
 import CancelButton from "./CancelButton";
 import EditButton from "./EditButton";
 import DeleteButton from "./DeleteButton";
+import TableContext from "@/context/cabinet/TableContext";
+import { useContext } from "react";
 
 const ActionButtons = ({
   activeTable,
+  nameTable,
   row,
 }: {
   activeTable: string;
-  row: [];
+  nameTable: string;
+  row: any;
 }) => {
+  const { editRow } = useContext(TableContext);
   const { actionMode } = getTableState(activeTable);
-  const isEditMode = false;
+
+  const isEditMode =
+    editRow.name === (nameTable || activeTable) && editRow.row.id === row.id
+      ? editRow.status
+      : null;
 
   return actionMode === "add" ? (
     <AddButton row={row} />
@@ -24,8 +33,8 @@ const ActionButtons = ({
     </>
   ) : (
     <>
-      <EditButton />
-      <DeleteButton />
+      <EditButton row={row} activeTable={nameTable || activeTable} />
+      <DeleteButton row={row} activeTable={nameTable || activeTable} />
     </>
   );
 };

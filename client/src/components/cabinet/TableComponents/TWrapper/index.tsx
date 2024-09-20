@@ -17,7 +17,7 @@ const TWrapper = ({
   topTable: string;
   bottomTable: string | boolean;
 }) => {
-  const { refetchTable, refetchTableById, activeAddId, newRow } =
+  const { refetchTable, refetchTableById, activeAddId, newRow, update } =
     useContext(TableContext);
   const tableContainer1Ref = useRef<HTMLDivElement>(null);
   const tableContainer2Ref = useRef<HTMLDivElement>(null);
@@ -93,13 +93,13 @@ const TWrapper = ({
 
   useEffect(() => {
     refetchTable(topTable);
-  }, [refetchTable, topTable, newRow]);
+  }, [refetchTable, topTable, newRow, update]);
 
   useEffect(() => {
     if (typeof bottomTable === "string") {
       refetchTableById(bottomTable);
     }
-  }, [refetchTableById, bottomTable, newRow]);
+  }, [refetchTableById, bottomTable, newRow, update]);
 
   return (
     <Box sx={{ p: 1, maxHeight: "70vh" }} className="table-wrapper">

@@ -4,7 +4,7 @@ import TableContext from "@/context/cabinet/TableContext";
 import { useContext } from "react";
 
 const AddButton = ({ row }: { row: any }) => {
-  const { setActiveAddId } = useContext(TableContext);
+  const { setActiveAddId, newRow, editRow } = useContext(TableContext);
 
   const handleClick = () => {
     setActiveAddId(row.id);
@@ -17,6 +17,7 @@ const AddButton = ({ row }: { row: any }) => {
       className={"rowModifyButtons rowGreenButton"}
       startIcon={<AddIcon />}
       onClick={handleClick}
+      disabled={newRow.status || editRow.status}
     />
   );
 };

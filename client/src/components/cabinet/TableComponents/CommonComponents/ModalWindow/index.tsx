@@ -30,7 +30,7 @@ const modalWrapper = {
 };
 
 const ModalWindow = () => {
-  const { newRow, setNewRow, setHelperText, activeAddId, setOpenSnackbar } =
+  const { newRow, setNewRow, setSnackbarState, activeAddId, setOpenSnackbar } =
     useContext(TableContext);
   const tableState = getTableState(newRow.name) || {
     name: "",
@@ -48,7 +48,6 @@ const ModalWindow = () => {
     elements
   );
 
-  // Обновление ID для всех элементов типа 'data'
   const preparedFormState = formState.map((field) => {
     const element = elements.find(
       (el: any) => el.name === field.name && el.type === "data"
@@ -92,9 +91,24 @@ const ModalWindow = () => {
           status: false,
           name: "",
         });
+        setSnackbarState({
+          type: "success",
+          mainText: "Дані успішно збережено!",
+          helperText: "",
+        });
+        setOpenSnackbar(true);
       });
     } else {
-      setHelperText(forHelperText);
+      setSnackbarState({
+        type: "error",
+        mainText: (
+          <>
+            Не всі обов&apos;язкові поля заповнені! <br /> Поля, які не
+            заповнені:
+          </>
+        ),
+        helperText: forHelperText,
+      });
       setOpenSnackbar(true);
     }
   };
