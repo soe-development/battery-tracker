@@ -194,11 +194,8 @@ export class AuthController {
   async user(@Req() request: any, @Res() response: any) {
     try {
       const dataToken = await this.jwtService.verifyAsync(
-        request.cookies['jwt-a.contract'],
+        request.cookies['jwt-btracker'],
       );
-
-      // const { token } = request.body;
-      // const dataToken = await this.jwtService.verifyAsync(token);
 
       if (!dataToken) {
         response.status(401).json({ status: 401, message: 'Not authorized' });
@@ -230,8 +227,9 @@ export class AuthController {
       expires: new Date(0),
     });
 
-    return {
-      message: 'success',
-    };
+    return response.status(200).json({
+      status: 200,
+      message: 'Logout successful',
+    });
   }
 }

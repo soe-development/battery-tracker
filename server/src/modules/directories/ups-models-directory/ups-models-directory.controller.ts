@@ -1,13 +1,13 @@
-import { Controller, Get, Post, Req, Res } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { UPSModelsDirectoryService } from './ups-models-directory.service';
 import { OtherEquipmentDirectoryService } from '../other-equipment-directory/other-equipment-directory.service';
 import { ObjectsDirectoryService } from '../objects-directory/objects-directory.service';
+import { AuthGuard } from 'src/modules/auth/auth.middleware';
 
 @Controller('ups-models-directory')
+@UseGuards(AuthGuard)
 export class UPSModelsDirectoryController {
   constructor(
-    private readonly jwtService: JwtService,
     private readonly otherEquipmentDirectoryService: OtherEquipmentDirectoryService,
     private readonly upsModelsDirectoryService: UPSModelsDirectoryService,
     private readonly objectsDirectoryService: ObjectsDirectoryService,
@@ -16,12 +16,6 @@ export class UPSModelsDirectoryController {
   @Post('create')
   async create(@Req() request: any, @Res() response: any) {
     try {
-      // const { token } = request.body;
-      // const dataToken = await this.jwtService.verifyAsync(token);
-      // if (!dataToken) {
-      //   response.status(401).json({ status: 401, result: 'Not authorized' });
-      // } else {
-
       const { data } = request.body;
 
       const result = await this.upsModelsDirectoryService.create({
@@ -49,11 +43,6 @@ export class UPSModelsDirectoryController {
   @Get('find')
   async get(@Req() request: any, @Res() response: any) {
     try {
-      // const { token } = request.body;
-      // const dataToken = await this.jwtService.verifyAsync(token);
-      // if (!dataToken) {
-      //   response.status(401).json({ status: 401, result: 'Not authorized' });
-      // } else {
       const data = await this.upsModelsDirectoryService.find();
 
       response.status(200).json({
@@ -61,7 +50,6 @@ export class UPSModelsDirectoryController {
         status: 200,
         message: 'Successful find',
       });
-      // }
     } catch (error) {
       response.status(401).json({ status: 401, message: 'Not authorized' });
     }
@@ -70,12 +58,6 @@ export class UPSModelsDirectoryController {
   @Get('findCreateData')
   async getCreateData(@Req() request: any, @Res() response: any) {
     try {
-      // const { token } = request.body;
-      // const dataToken = await this.jwtService.verifyAsync(token);
-      // if (!dataToken) {
-      //   response.status(401).json({ status: 401, result: 'Not authorize' });
-      // } else {
-
       const otherEquipmentDirectory =
         await this.otherEquipmentDirectoryService.find();
 
@@ -119,7 +101,6 @@ export class UPSModelsDirectoryController {
         status: 200,
         message: 'Successful find',
       });
-      //}
     } catch (error) {
       response.status(401).json({ status: 401, message: 'Not authorized' });
     }
