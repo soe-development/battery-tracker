@@ -39,7 +39,7 @@ export class BatteryReplacementController {
           name: 'receiving-batteries',
           value: receipt.map((element: any) => {
             return {
-              id: element.receiptId,
+              id: element.id,
               name:
                 element.typeBattery +
                 ' | ' +
@@ -65,6 +65,9 @@ export class BatteryReplacementController {
   async create(@Req() request: any, @Res() response: any) {
     try {
       const { data } = request.body;
+
+      console.log(data);
+
       const receipt = await this.receiptService.findById(data[1].id);
 
       const result = await this.batteryReplacementService.create({
@@ -110,17 +113,19 @@ export class BatteryReplacementController {
   async delete(@Req() request: any, @Res() response: any) {
     try {
       const { id } = request.body;
-      const result = this.batteryReplacementService.delete(id);
+      const result = await this.batteryReplacementService.delete(id);
+
+      console.log(result);
 
       if (result) {
         response
           .status(201)
           .json({ status: 201, result: 'Deleted successful' });
       } else {
-        response.status(501).json({ status: 501, result: 'Deleted failed' });
+        response.status(201).json({ status: 501, result: 'Deleted failed' });
       }
     } catch (error) {
-      response.status(401).json({ status: 401, message: 'Not authorized' });
+      response.status(501).json({ status: 501, result: 'Deleted failed' });
     }
   }
 }

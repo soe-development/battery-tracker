@@ -12,9 +12,18 @@ export class AuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
+    const response = context.switchToHttp().getResponse();
     const token = request.cookies['jwt-btracker'];
 
     if (!token) {
+      response.cookie('jwt-btracker', '', {
+        httpOnly: true,
+        secure: false,
+        domain: process.env.SERVER_HOST,
+        path: '/',
+        sameSite: 'lax',
+        expires: new Date(0),
+      });
       throw new UnauthorizedException('Authorization token missing');
     }
 

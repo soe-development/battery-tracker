@@ -12,7 +12,7 @@
 @font-face {
     font-family: 'Cera Pro';
     src: url('CeraPro-Regular.eot');
-    src: local('Cera Pro Regular'), local('CeraPro-Regular'),
+    src: local('Cera Pro'), local('CeraPro-Regular'),
         url('CeraPro-Regular.eot?#iefix') format('embedded-opentype'),
         url('CeraPro-Regular.woff') format('woff'),
         url('CeraPro-Regular.ttf') format('truetype');

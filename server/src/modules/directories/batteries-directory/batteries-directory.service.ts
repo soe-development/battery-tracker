@@ -32,11 +32,9 @@ export class BatteriesDirectoryService {
 
   async delete(id: number) {
     try {
-      const result = await this.batteriesDirectoryRepository.delete(id);
-      return result;
+      return await this.batteriesDirectoryRepository.delete(id);
     } catch (error) {
-      console.error(error);
-      return;
+      return false;
     }
   }
 }

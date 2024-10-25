@@ -76,7 +76,8 @@ export class EquipmentCardService {
             batteriesDirectory || {};
 
           return {
-            id: id,
+            id,
+            addId: batteriesDirectoryId,
             upsModelsDirectoryId,
             otherEquipmentDirectoryId,
             batteriesDirectoryId,
@@ -121,22 +122,11 @@ export class EquipmentCardService {
     }
   }
 
-  // async find() {
-  //   const data = await this.equipmentCardRepository
-  //     .createQueryBuilder('equipmentCardRepository')
-  //     .select(['equipmentCardRepository'])
-  //     .getMany();
-
-  //   return data;
-  // }
-
-  async delete(data: any) {
+  async delete(id: number) {
     try {
-      const { id } = data;
       return await this.equipmentCardRepository.delete(id);
     } catch (error) {
-      console.error(error);
-      return;
+      return false;
     }
   }
 }

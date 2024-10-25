@@ -52,6 +52,7 @@ const UserIcon = () => {
         <MenuItem
           onClick={() => {
             clearUser();
+            console.log(user);
           }}
         >
           <Typography textAlign="center">Вийти</Typography>

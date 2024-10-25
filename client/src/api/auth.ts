@@ -1,5 +1,5 @@
 import { IUser } from "@/types/user";
-import api from "./api";
+import api from "./table/api";
 
 export const requestLogIn = async (login: string, password: string) => {
   await api.post(

@@ -26,7 +26,10 @@ export class BranchesDirectoryService {
   }
 
   async delete(id: number) {
-    console.log(id);
-    return await this.branchesDirectory.delete(id);
+    try {
+      return await this.branchesDirectory.delete(id);
+    } catch (error) {
+      return false;
+    }
   }
 }

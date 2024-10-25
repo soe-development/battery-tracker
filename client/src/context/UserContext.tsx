@@ -30,16 +30,18 @@ export const UserContextProvider: FC<IUserContextProviderProps> = ({
   user: initialUser,
   children,
 }) => {
-  const router = useRouter();
+  //const router = useRouter();
 
   const [user, setUser] = useState(initialUser || null);
 
   const clearUser = useCallback(() => {
-    requestLogOut().then(() => {
-      setUser(null);
-      router.push("/auth");
-    });
-  }, [router]);
+    requestLogOut()
+      .then(() => {})
+      .finally(() => {
+        setUser(null);
+        window.location.reload();
+      });
+  }, []);
 
   const refetchUser = useCallback(() => {
     getUser()

@@ -30,12 +30,9 @@ export const createEntry = async (name: string, sendData: any) => {
 };
 
 export const deleteEntry = async (name: string, id: number) => {
-  console.log(process.env.API_URL + `/${name}/delete`);
-  console.log(name, id);
-  const { data } = await api.post(process.env.API_URL + `/${name}/delete`, {
-    id: id,
+  const { data } = await api.post(`${process.env.API_URL}/${name}/delete`, {
+    id,
   });
-
   return data;
 };
 

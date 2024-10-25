@@ -716,8 +716,8 @@ const tableState = {
         sort: true,
         colspan: 1,
         rowspan: 2,
-        width: 20,
-        maxWidth: 20,
+        width: 80,
+        maxWidth: 80,
       },
       {
         name: "numberOfBatteries",
@@ -738,8 +738,8 @@ const tableState = {
         sort: true,
         colspan: 1,
         rowspan: 2,
-        width: 20,
-        maxWidth: 20,
+        width: 80,
+        maxWidth: 80,
       },
       {
         name: "typeBattery",
@@ -871,7 +871,7 @@ const tableState = {
         width: 100,
       },
     ],
-    exceptionKeyColumn: ["id", "batteriesDirectoryId", "receiptId"],
+    exceptionKeyColumn: ["id", "batteriesDirectoryId", "receiptId", "addId"],
 
     initialFilters: {
       id: null,
@@ -885,7 +885,7 @@ const tableState = {
     },
     rcspan: false,
     expandbleRow: false,
-    actionMode: "add",
+    actionMode: "add;delete",
     staticHeight: 288,
     newRowStartRequest: true,
     newRow: {
@@ -1067,6 +1067,7 @@ const tableState = {
       "upsModelsDirectoryId",
       "batteriesDirectoryId",
       "otherEquipmentDirectoryId",
+      "addId",
     ],
 
     initialFilters: {

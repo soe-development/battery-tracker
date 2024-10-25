@@ -88,22 +88,16 @@ export class EquipmentCardController {
   @Post('findBatteryReplacement')
   async getBatteryReplacement(@Req() request: any, @Res() response: any) {
     try {
-      const { token } = request.body;
-      const dataToken = await this.jwtService.verifyAsync(token);
-      if (!dataToken) {
-        response.status(401).json({ status: 401, result: 'Not authorized' });
-      } else {
-        const { upsModelsDirectoryId } = request.body;
-        const findData = await this.equipmentCardService.findBatteryReplacement(
-          upsModelsDirectoryId,
-        );
+      const { upsModelsDirectoryId } = request.body;
+      const findData = await this.equipmentCardService.findBatteryReplacement(
+        upsModelsDirectoryId,
+      );
 
-        response.status(200).json({
-          findData: findData,
-          status: 200,
-          message: 'Successful find',
-        });
-      }
+      response.status(200).json({
+        findData: findData,
+        status: 200,
+        message: 'Successful find',
+      });
     } catch (error) {
       response.status(401).json({ status: 401, message: 'Not authorized' });
     }
@@ -112,19 +106,15 @@ export class EquipmentCardController {
   @Post('delete')
   async delete(@Req() request: any, @Res() response: any) {
     try {
-      const { token } = request.body;
-      const dataToken = await this.jwtService.verifyAsync(token);
+      const { id } = request.body;
+      const result = await this.equipmentCardService.delete(id);
 
-      if (!dataToken) {
-        response.status(401).json({ status: 401, result: 'Not authorized' });
+      if (result) {
+        response
+          .status(201)
+          .json({ status: 201, result: 'Deleted successful' });
       } else {
-        const data = request.body;
-        this.equipmentCardService.delete(data);
-
-        response.status(200).json({
-          status: 200,
-          message: 'Successful delete',
-        });
+        response.status(201).json({ status: 501, result: 'Deleted failed' });
       }
     } catch (error) {
       response.status(401).json({ status: 401, message: 'Not authorized' });

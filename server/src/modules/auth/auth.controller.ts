@@ -1,9 +1,18 @@
-import { Controller, Get, HttpStatus, Post, Req, Res } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpStatus,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { ActiveDirectoryService } from './active-directory.service';
 import { AuthService } from './auth.service';
 import { RoleService } from '../role/role.service';
 import { UsersRolesService } from '../users-roles/users-roles.service';
 import { JwtService } from '@nestjs/jwt';
+import { AuthGuard } from './auth.middleware';
 
 const staticTestUsers = [
   {
@@ -102,6 +111,8 @@ export class AuthController {
     try {
       const { login, password } = request.body;
 
+      console.log(request.body, request.cookies['jwt-btracker']);
+
       const user = staticTestUsers.find(
         (u) => u.username === login && u.password === password,
       );
@@ -191,45 +202,56 @@ export class AuthController {
   }
 
   @Get('user')
+  @UseGuards(AuthGuard)
   async user(@Req() request: any, @Res() response: any) {
     try {
-      const dataToken = await this.jwtService.verifyAsync(
-        request.cookies['jwt-btracker'],
-      );
+      const token = request.cookies['jwt-btracker'];
+      const decoded = this.jwtService.verify(token);
 
-      if (!dataToken) {
-        response.status(401).json({ status: 401, message: 'Not authorized' });
-      } else {
-        const { userId, name, username, role } = dataToken;
-        response.status(200).json({
-          status: 200,
-          user: {
-            userId: userId,
-            name: name,
-            username: username,
-            role: role,
-          },
-        });
-      }
+      const { userId, name, username, role } = decoded;
+
+      return response.status(200).json({
+        status: 200,
+        user: {
+          userId: userId,
+          name: name,
+          username: username,
+          role: role,
+        },
+      });
     } catch (error) {
-      response.status(401).json({ status: 401, message: 'Not authorized' });
+      console.error(error); // Логирование ошибки для отладки
+      return response
+        .status(401)
+        .json({ status: 401, message: 'Not authorized' });
     }
   }
 
   @Post('logout')
-  async logout(@Res({ passthrough: true }) response: any) {
-    response.cookie('jwt-btracker', '', {
-      httpOnly: true,
-      secure: true,
-      domain: process.env.SERVER_HOST,
-      path: '/',
-      sameSite: 'lax',
-      expires: new Date(0),
-    });
+  @UseGuards(AuthGuard)
+  async logout(@Req() request: any, @Res() response: any) {
+    try {
+      // Удаляем токен из куки
+      response.cookie('jwt-btracker', '', {
+        httpOnly: true,
+        secure: false, // Убедитесь, что secure установлено правильно для production (true для HTTPS)
+        domain: process.env.SERVER_HOST, // Важен правильный домен
+        path: '/',
+        sameSite: 'lax',
+        expires: new Date(0), // Установка прошедшей даты для удаления куки
+      });
 
-    return response.status(200).json({
-      status: 200,
-      message: 'Logout successful',
-    });
+      // Отправляем успешный ответ
+      return response.status(200).send({
+        status: 200,
+        message: 'Logout successful',
+      });
+    } catch (error) {
+      console.error('Error during logout:', error);
+      return response.status(500).send({
+        status: 500,
+        message: 'Logout failed',
+      });
+    }
   }
 }

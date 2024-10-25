@@ -41,7 +41,7 @@ const AuthFields = () => {
             !authContext?.authFormData.login.isValid ? "Некоректний логін" : ""
           }
           onChange={handleInputChange("login")}
-          sx={{ width: "300px" }}
+          sx={{ width: "300px", backgroundColor: "secondary.light" }}
         />
       </Box>
       <Box sx={{ pb: "25px" }}>
@@ -50,7 +50,7 @@ const AuthFields = () => {
           placeholder={"Пароль"}
           label={"Пароль"}
           type={showPassword ? "text" : "password"}
-          sx={{ width: "300px" }}
+          sx={{ width: "300px", backgroundColor: "secondary.light" }}
           error={!authContext?.authFormData.password.isValid}
           helperText={
             !authContext?.authFormData.password.isValid

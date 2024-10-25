@@ -52,7 +52,10 @@ export class ObjectsDirectoryService {
   }
 
   async delete(id: number) {
-    const result = await this.objectsDirectoryRepository.delete(id);
-    return result;
+    try {
+      return await this.objectsDirectoryRepository.delete(id);
+    } catch (error) {
+      return false;
+    }
   }
 }

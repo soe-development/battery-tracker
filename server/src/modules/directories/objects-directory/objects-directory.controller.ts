@@ -92,7 +92,7 @@ export class ObjectsDirectoryController {
           .status(201)
           .json({ status: 201, result: 'Updated successful' });
       } else {
-        response.status(501).json({ status: 501, result: 'Updated failed' });
+        response.status(201).json({ status: 501, result: 'Deleted failed' });
       }
     } catch (error) {
       response.status(401).json({ status: 401, message: 'Not authorized' });
@@ -103,7 +103,7 @@ export class ObjectsDirectoryController {
   async delete(@Req() request: any, @Res() response: any) {
     try {
       const { id } = request.body;
-      const result = this.objectsDirectoryService.delete(id);
+      const result = await this.objectsDirectoryService.delete(id);
 
       if (result) {
         response

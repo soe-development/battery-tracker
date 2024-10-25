@@ -27,7 +27,7 @@ const themeOptions: ThemeOptions = {
     },
   },
   typography: {
-    fontFamily: "Cera Pro Regular",
+    fontFamily: "Cera Pro",
     h1: {
       fontFamily: "Cera Pro",
       textTransform: "uppercase",
@@ -66,6 +66,7 @@ const themeOptions: ThemeOptions = {
           "& .MuiTableRow-root": {
             "&:hover": {
               cursor: "pointer",
+              backgroundColor: "#e3e8f1",
             },
             "&.tableRowUpper": {
               position: "sticky",
@@ -112,7 +113,7 @@ const themeOptions: ThemeOptions = {
             justifyItems: "center",
             fontWeight: 600,
             fontSize: 20,
-            fontFamily: "Cera Pro Regular",
+            fontFamily: "Cera Pro",
           },
         },
       },

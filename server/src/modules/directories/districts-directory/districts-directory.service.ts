@@ -44,6 +44,10 @@ export class DistrictsDirectoryService {
   }
 
   async delete(id: number) {
-    return await this.districtsDirectory.delete(id);
+    try {
+      return await this.districtsDirectory.delete(id);
+    } catch (error) {
+      return false;
+    }
   }
 }

@@ -35,7 +35,12 @@ const THeaderBottom = ({ activeTable }: { activeTable: string }) => {
         {headColumnData?.map((column: any) => (
           <TableCell
             key={column.name}
-            sx={{ width: column.width, maxWidth: column.maxWidth }}
+            sx={{
+              width: column.width,
+              maxWidth: column.maxWidth,
+              textAlign:
+                column.colspan > 1 ? "center !important" : "justify !important",
+            }}
             onClick={() => {
               handleColumnSort(column.name);
             }}

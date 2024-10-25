@@ -92,14 +92,14 @@ export class BatteriesDirectoryController {
   async delete(@Req() request: any, @Res() response: any) {
     try {
       const { id } = request.body;
-      const result = this.batteriesDirectoryService.delete(id);
+      const result = await this.batteriesDirectoryService.delete(id);
 
       if (result) {
         response
           .status(201)
           .json({ status: 201, result: 'Deleted successful' });
       } else {
-        response.status(501).json({ status: 501, result: 'Deleted failed' });
+        response.status(201).json({ status: 501, result: 'Deleted failed' });
       }
     } catch (error) {
       response.status(401).json({ status: 401, message: 'Not authorized' });

@@ -51,6 +51,10 @@ export class BatteryReplacementService {
   }
 
   async delete(id: number) {
-    return this.batteryReplacementRepository.delete(id);
+    try {
+      return await this.batteryReplacementRepository.delete(id);
+    } catch (error) {
+      return false;
+    }
   }
 }
