@@ -130,13 +130,30 @@ export class ReceiptController {
     }
   }
 
+  @Post('update')
+  async update(@Req() request: any, @Res() response: any) {
+    try {
+      const { data } = request.body;
+
+      const result = await this.receiptService.update(data);
+
+      if (result) {
+        response
+          .status(201)
+          .json({ status: 201, result: 'Updated successful' });
+      } else {
+        response.status(201).json({ status: 501, result: 'Updated failed' });
+      }
+    } catch (error) {
+      response.status(401).json({ status: 401, message: 'Not authorized' });
+    }
+  }
+
   @Post('delete')
   async delete(@Req() request: any, @Res() response: any) {
     try {
       const { id } = request.body;
       const result = await this.receiptService.delete(id);
-
-      console.log(result);
 
       if (result) {
         response

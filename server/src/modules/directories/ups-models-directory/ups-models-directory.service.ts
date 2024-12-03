@@ -18,11 +18,7 @@ export class UPSModelsDirectoryService {
     const data = await this.upsModelsDirectoryRepository
       .createQueryBuilder('upsModelsDirectoryRepository')
       .leftJoin(
-        'upsModelsDirectoryRepository.otherEquipmentDirectory',
-        'otherEquipmentDirectory',
-      )
-      .leftJoin(
-        'otherEquipmentDirectory.batteriesDirectory',
+        'upsModelsDirectoryRepository.batteriesDirectory',
         'batteriesDirectory',
       )
       .leftJoin(
@@ -32,7 +28,6 @@ export class UPSModelsDirectoryService {
       .leftJoin('objectsDirectory.districtsDirectory', 'districtsDirectory')
       .select([
         'upsModelsDirectoryRepository',
-        'otherEquipmentDirectory',
         'batteriesDirectory',
         'objectsDirectory',
         'districtsDirectory',
@@ -42,30 +37,23 @@ export class UPSModelsDirectoryService {
     const result = data.map((element: any) => {
       const {
         id: upsModelsDirectoryid = null,
-        power = null,
-        inventoryNumber = null,
-        s_n = null,
-        yearProductionUPS = null,
-        apcs = null,
-        dateOfLastBatteryReplacement = null,
-        otherEquipmentDirectory = {},
-        objectsDirectory = {},
-      } = element || {};
-
-      const {
-        id: otherEquipmentDirectoryId = null,
         producer = null,
         model = null,
-        batteriesDirectory,
-      } = otherEquipmentDirectory || {};
+        power = null,
+        batteriesDirectoryId,
+        typeBattery = null,
+        numberOfBatteries = null,
+        yearProductionUPS = null,
+        inventoryNumber = null,
+        s_n = null,
+        apcs = null,
+        dateOfLastBatteryReplacement = null,
+        objectsDirectoryId,
+        objectLocation = null,
+        objectsDirectory,
+      } = element || {};
 
-      const { typeBattery } = batteriesDirectory;
-
-      const {
-        id: objectsDirectoryId = null,
-        name: objectsDirectoryName = null,
-        districtsDirectory = {},
-      } = objectsDirectory || {};
+      const { districtsDirectory = {} } = objectsDirectory || {};
 
       const { id: districtsDirectoryId = null, branchesDirectoryId = null } =
         districtsDirectory || {};
@@ -73,20 +61,24 @@ export class UPSModelsDirectoryService {
       return {
         id: upsModelsDirectoryid,
         upsModelsDirectoryid,
+        batteriesDirectoryId,
         objectsDirectoryId,
         districtsDirectoryId,
         branchesDirectoryId,
-        otherEquipmentDirectoryId,
         producer,
         model,
-        typeBattery,
         power,
+        typeBattery,
+        numberOfBatteries,
+        yearProductionUPS,
         inventoryNumber,
         s_n,
-        yearProductionUPS,
         apcs,
-        dateOfLastBatteryReplacement,
-        objectsDirectoryName,
+        dateOfLastBatteryReplacement:
+          dateOfLastBatteryReplacement === null
+            ? '-'
+            : dateOfLastBatteryReplacement,
+        objectsDirectoryName: objectLocation,
       };
     });
 
@@ -94,8 +86,32 @@ export class UPSModelsDirectoryService {
   }
 
   async update(data: any) {
-    const { id, power } = data;
-    return this.upsModelsDirectoryRepository.update(id, { power });
+    const {
+      id,
+      dateOfLastBatteryReplacement,
+      objectsDirectoryName,
+      districtsDirectoryId,
+      branchesDirectoryId,
+      upsModelsDirectoryid,
+      ...rest
+    } = data;
+
+    try {
+      const updateData = {
+        ...rest,
+        dateOfLastBatteryReplacement:
+          dateOfLastBatteryReplacement === '-'
+            ? null
+            : dateOfLastBatteryReplacement,
+        objectLocation:
+          objectsDirectoryName === '-' ? null : objectsDirectoryName,
+      };
+
+      return await this.upsModelsDirectoryRepository.update(id, updateData);
+    } catch (error) {
+      console.error('Error updating record:', error);
+      throw new Error('Failed to update record');
+    }
   }
 
   async delete(id: number) {

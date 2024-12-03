@@ -51,6 +51,9 @@ import { ConfigModule } from '@nestjs/config';
 import { BudgetApiController } from './modules/budget-api/budget-api.controller';
 import { BudgetApiService } from './modules/budget-api/budget-api.service';
 import { BudgetApiDbService } from './modules/budget-api/budget-api.db';
+import { Notifications } from './entities/notifications.entity';
+import { NotificationsService } from './modules/notifications/notifications.service';
+import { NotificationsController } from './modules/notifications/notifications.controller';
 
 @Module({
   imports: [
@@ -80,6 +83,7 @@ import { BudgetApiDbService } from './modules/budget-api/budget-api.db';
         Costs,
         EquipmentCard,
         BatteryReplacement,
+        Notifications,
       ],
       synchronize: true,
     }),
@@ -98,6 +102,7 @@ import { BudgetApiDbService } from './modules/budget-api/budget-api.db';
       Costs,
       EquipmentCard,
       BatteryReplacement,
+      Notifications,
     ]),
     JwtModule.register({
       secret: 'abdulalhazred',
@@ -118,6 +123,7 @@ import { BudgetApiDbService } from './modules/budget-api/budget-api.db';
     EquipmentCardController,
     TotalController,
     BudgetApiController,
+    NotificationsController,
   ],
   providers: [
     AuthService,
@@ -137,6 +143,7 @@ import { BudgetApiDbService } from './modules/budget-api/budget-api.db';
     TotalService,
     BudgetApiService,
     BudgetApiDbService,
+    NotificationsService,
   ],
 })
 export class AppModule {}

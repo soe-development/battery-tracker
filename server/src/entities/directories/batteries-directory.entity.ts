@@ -18,4 +18,7 @@ export class BatteriesDirectory {
 
   @Column({ name: 'A/h', type: 'double precision' })
   a_h: number;
+
+  @Column({ name: 'term', type: 'double precision', default: 0 })
+  term: string;
 }

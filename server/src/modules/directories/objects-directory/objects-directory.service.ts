@@ -21,21 +21,22 @@ export class ObjectsDirectoryService {
         'objectsDirectoryRepository.districtsDirectory',
         'districtsDirectory',
       )
-      .select(['objectsDirectoryRepository', 'districtsDirectory.name'])
+      .select(['objectsDirectoryRepository', 'districtsDirectory'])
       .getMany();
 
     const result = data.map((element) => {
       const {
         id,
-        districtsDirectory: { name: districtName },
         name,
         voltage,
+        districtsDirectory: { id: districtsDirectoryId, name: districtName },
       } = element;
 
       return {
         id: id,
+        districtsDirectoryId: districtsDirectoryId,
         districtName: districtName,
-        objectName: name,
+        objectsDirectoryName: name,
         voltage: voltage,
       };
     });
@@ -43,10 +44,16 @@ export class ObjectsDirectoryService {
   }
 
   async update(data: any) {
-    const { id, objectName: name, voltage } = data;
+    const {
+      id,
+      objectsDirectoryName: name,
+      voltage,
+      districtsDirectoryId,
+    } = data;
     const result = await this.objectsDirectoryRepository.update(id, {
       name,
       voltage,
+      districtsDirectoryId,
     });
     return result;
   }

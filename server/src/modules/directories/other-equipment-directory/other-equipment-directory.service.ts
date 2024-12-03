@@ -22,23 +22,57 @@ export class OtherEquipmentDirectoryService {
         'otherEquipmentDirectory.batteriesDirectory',
         'batteriesDirectory',
       )
-      .select(['otherEquipmentDirectory', 'batteriesDirectory.typeBattery'])
+      .leftJoin('otherEquipmentDirectory.objectsDirectory', 'objectsDirectory')
+      .leftJoin('objectsDirectory.districtsDirectory', 'districtsDirectory')
+      .select([
+        'otherEquipmentDirectory',
+        'batteriesDirectory.typeBattery',
+        'objectsDirectory',
+        'districtsDirectory',
+      ])
       .getMany();
 
     const result = data.map((element: any) => {
       const {
         batteriesDirectory: { typeBattery },
-        ...rest
+        inventoryNumber = null,
+        s_n = null,
+        power = null,
+        yearProductionUPS = null,
+        apcs = null,
+        dateOfLastBatteryReplacement = null,
+        objectsDirectory = {},
       } = element;
+
+      const {
+        id: objectsDirectoryId = null,
+        name: objectsDirectoryName = '-',
+        districtsDirectory = {},
+      } = objectsDirectory || {};
+
+      const { id: districtsDirectoryId = null, branchesDirectoryId = null } =
+        districtsDirectory || {};
 
       return (element = {
         id: element.id,
         batteriesDirectoryId: element.batteriesDirectoryId,
+        objectsDirectoryId,
+        districtsDirectoryId,
+        branchesDirectoryId,
         producer: element.producer,
         model: element.model,
+        power,
         typeBattery: typeBattery,
         numberOfBatteries: element.numberOfBatteries,
-        dateOfLastBatteryReplacement: element.dateOfLastBatteryReplacement,
+        yearProductionUPS,
+        inventoryNumber,
+        s_n,
+        apcs,
+        dateOfLastBatteryReplacement:
+          dateOfLastBatteryReplacement === null
+            ? '-'
+            : dateOfLastBatteryReplacement,
+        objectsDirectoryName,
       });
     });
 
@@ -86,13 +120,34 @@ export class OtherEquipmentDirectoryService {
   }
 
   async update(data: any) {
-    const { id, producer, model, numberOfBatteries } = data;
+    const {
+      id,
+      dateOfLastBatteryReplacement,
+      objectsDirectoryName,
+      districtsDirectoryId,
+      branchesDirectoryId,
+      ...rest
+    } = data;
 
-    return this.otherEquipmentDirectoryRepository.update(id, {
-      producer,
-      model,
-      numberOfBatteries,
-    });
+    try {
+      const updateData = {
+        ...rest,
+        dateOfLastBatteryReplacement:
+          dateOfLastBatteryReplacement === '-'
+            ? null
+            : dateOfLastBatteryReplacement,
+        objectLocation:
+          objectsDirectoryName === '-' ? null : objectsDirectoryName,
+      };
+
+      return await this.otherEquipmentDirectoryRepository.update(
+        id,
+        updateData,
+      );
+    } catch (error) {
+      console.error('Error updating record:', error);
+      throw new Error('Failed to update record');
+    }
   }
   async delete(id: number) {
     try {

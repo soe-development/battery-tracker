@@ -1,5 +1,4 @@
 import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { BatteryReplacementService } from './battery-replacement.service';
 import { ReceiptService } from '../receipt/receipt.service';
 import { AuthGuard } from 'src/modules/auth/auth.middleware';
@@ -8,7 +7,6 @@ import { AuthGuard } from 'src/modules/auth/auth.middleware';
 @UseGuards(AuthGuard)
 export class BatteryReplacementController {
   constructor(
-    private readonly jwtService: JwtService,
     private readonly batteryReplacementService: BatteryReplacementService,
     private readonly receiptService: ReceiptService,
   ) {}
@@ -66,8 +64,6 @@ export class BatteryReplacementController {
     try {
       const { data } = request.body;
 
-      console.log(data);
-
       const receipt = await this.receiptService.findById(data[1].id);
 
       const result = await this.batteryReplacementService.create({
@@ -114,8 +110,6 @@ export class BatteryReplacementController {
     try {
       const { id } = request.body;
       const result = await this.batteryReplacementService.delete(id);
-
-      console.log(result);
 
       if (result) {
         response

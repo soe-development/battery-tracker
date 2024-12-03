@@ -20,11 +20,12 @@ export class BatteriesDirectoryService {
   }
 
   async update(data: any) {
-    const { id, typeBattery, a_h } = data;
+    const { id, typeBattery, a_h, term } = data;
 
     const result = this.batteriesDirectoryRepository.update(id, {
       typeBattery,
       a_h,
+      term,
     });
 
     return result;

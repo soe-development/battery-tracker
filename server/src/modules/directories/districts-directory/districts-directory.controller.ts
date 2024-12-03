@@ -118,8 +118,6 @@ export class DistrictsDirectoryController {
       const { id } = request.body;
       const result = await this.districtsDirectoryService.delete(id);
 
-      console.log(result);
-
       if (result) {
         response
           .status(201)

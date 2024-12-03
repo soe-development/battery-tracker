@@ -14,52 +14,52 @@ import { UsersRolesService } from '../users-roles/users-roles.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from './auth.middleware';
 
-const staticTestUsers = [
-  {
-    userId: 10,
-    username: 'user_1',
-    password: '1111',
-    name: 'Переглядач загальної таблиці',
-    role: {
-      id: 10,
-      name: 'commonTableViewer',
-      permission: '2. View common table;',
-    },
-  },
-  {
-    userId: 11,
-    username: 'user_2',
-    password: '2222',
-    name: 'Заповнювач довідників',
-    role: {
-      id: 11,
-      name: 'fillerDirectories',
-      permission: '3. Fill dirictories;',
-    },
-  },
-  {
-    userId: 12,
-    username: 'user_3',
-    password: '3333',
-    name: 'Заповнювач Карти Обладнання',
-    role: {
-      id: 12,
-      name: 'fillerEquipmentCard',
-      permission: '4. Fill equipment card;',
-    },
-  },
-  {
-    userId: 13,
-    username: 'user_4',
-    password: '4444',
-    name: 'Замінювач АКБ',
-    role: {
-      id: 13,
-      name: 'replacementerOfBatteries',
-      permission: '5. Replace battery;',
-    },
-  },
-];
+// const staticTestUsers = [
+//   {
+//     userId: 10,
+//     username: 'user_1',
+//     password: '1111',
+//     name: 'Переглядач загальної таблиці',
+//     role: {
+//       id: 10,
+//       name: 'commonTableViewer',
+//       permission: '2. View common table;',
+//     },
+//   },
+//   {
+//     userId: 11,
+//     username: 'user_2',
+//     password: '2222',
+//     name: 'Заповнювач довідників',
+//     role: {
+//       id: 11,
+//       name: 'fillerDirectories',
+//       permission: '3. Fill dirictories;',
+//     },
+//   },
+//   {
+//     userId: 12,
+//     username: 'user_3',
+//     password: '3333',
+//     name: 'Заповнювач Карти Обладнання',
+//     role: {
+//       id: 12,
+//       name: 'fillerEquipmentCard',
+//       permission: '4. Fill equipment card;',
+//     },
+//   },
+//   {
+//     userId: 13,
+//     username: 'user_4',
+//     password: '4444',
+//     name: 'Замінювач АКБ',
+//     role: {
+//       id: 13,
+//       name: 'replacementerOfBatteries',
+//       permission: '5. Replace battery;',
+//     },
+//   },
+// ];
 
 @Controller('auth')
 export class AuthController {
@@ -111,22 +111,20 @@ export class AuthController {
     try {
       const { login, password } = request.body;
 
-      console.log(request.body, request.cookies['jwt-btracker']);
+      // const user = staticTestUsers.find(
+      //   (u) => u.username === login && u.password === password,
+      // );
 
-      const user = staticTestUsers.find(
-        (u) => u.username === login && u.password === password,
-      );
-
-      if (user) {
-        await this.authenticateUser(
-          response,
-          user.userId,
-          user.name,
-          user.username,
-          user.role,
-        );
-        return;
-      }
+      // if (user) {
+      //   await this.authenticateUser(
+      //     response,
+      //     user.userId,
+      //     user.name,
+      //     user.username,
+      //     user.role,
+      //   );
+      //   return;
+      // }
 
       this.adService.setCredentials(login, password);
       const userInAD = await this.adService.getUser();
@@ -185,6 +183,7 @@ export class AuthController {
       domain: process.env.SERVER_HOST,
       secure: true,
       sameSite: 'lax',
+      //maxAge: 1000,
       path: '/',
     });
 
@@ -220,7 +219,7 @@ export class AuthController {
         },
       });
     } catch (error) {
-      console.error(error); // Логирование ошибки для отладки
+      console.error(error);
       return response
         .status(401)
         .json({ status: 401, message: 'Not authorized' });
@@ -231,17 +230,15 @@ export class AuthController {
   @UseGuards(AuthGuard)
   async logout(@Req() request: any, @Res() response: any) {
     try {
-      // Удаляем токен из куки
       response.cookie('jwt-btracker', '', {
         httpOnly: true,
-        secure: false, // Убедитесь, что secure установлено правильно для production (true для HTTPS)
-        domain: process.env.SERVER_HOST, // Важен правильный домен
+        secure: false,
+        domain: process.env.SERVER_HOST,
         path: '/',
         sameSite: 'lax',
-        expires: new Date(0), // Установка прошедшей даты для удаления куки
+        expires: new Date(0),
       });
 
-      // Отправляем успешный ответ
       return response.status(200).send({
         status: 200,
         message: 'Logout successful',

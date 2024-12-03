@@ -1,5 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { BatteriesDirectory } from './batteries-directory.entity';
+import { ObjectsDirectory } from './objects-directory.entity';
 
 @Entity()
 export class OtherEquipmentDirectory {
@@ -12,11 +13,26 @@ export class OtherEquipmentDirectory {
   @Column()
   model: string;
 
+  @Column({ name: 'power', type: 'double precision' })
+  power: number;
+
+  @Column()
+  typeBattery: string;
+
   @Column({ type: 'double precision' })
   numberOfBatteries: number;
 
-  @Column({ type: 'date' })
-  dateOfLastBatteryReplacement: Date;
+  @Column({ type: 'year' })
+  yearProductionUPS: Date;
+
+  @Column()
+  inventoryNumber: number;
+
+  @Column({ name: 's/n', default: null })
+  s_n: string;
+
+  @Column({ name: 'APCS' })
+  apcs: string;
 
   @Column()
   batteriesDirectoryId: number;
@@ -26,4 +42,16 @@ export class OtherEquipmentDirectory {
     (batteriesDirectory) => batteriesDirectory.id,
   )
   batteriesDirectory: BatteriesDirectory;
+
+  @Column({ default: null })
+  objectsDirectoryId: number;
+
+  @Column({ default: null })
+  objectLocation: string;
+
+  @ManyToOne(() => ObjectsDirectory, (ObjectsDirectory) => ObjectsDirectory.id)
+  objectsDirectory: ObjectsDirectory;
+
+  @Column({ type: 'date', default: null })
+  dateOfLastBatteryReplacement: Date;
 }
