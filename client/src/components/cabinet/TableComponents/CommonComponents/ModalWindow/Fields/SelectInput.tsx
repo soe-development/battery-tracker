@@ -46,10 +46,16 @@ const SelectInput = ({
         option.id === value?.id
       }
       renderInput={(params) => (
-        <TextField {...params} label={label} variant="standard" fullWidth />
+        <TextField
+          key={1}
+          {...params}
+          label={label}
+          variant="standard"
+          fullWidth
+        />
       )}
-      renderOption={(props, option) => (
-        <li {...props} key={option.id}>
+      renderOption={(props, option, index) => (
+        <li {...props} key={option.id || index}>
           {option.name}
         </li>
       )}

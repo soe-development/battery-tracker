@@ -31,6 +31,16 @@ const ActionButtons = ({
       <SaveButton />
       <CancelButton />
     </>
+  ) : actionMode === "add;edit;delete" ? (
+    <>
+      <AddButton row={row} />
+      <EditButton row={row} activeTable={nameTable || activeTable} />
+      <DeleteButton row={row} activeTable={nameTable || activeTable} />
+    </>
+  ) : actionMode === "delete" ? (
+    <>
+      <DeleteButton row={row} activeTable={nameTable || activeTable} />
+    </>
   ) : (
     <>
       <EditButton row={row} activeTable={nameTable || activeTable} />

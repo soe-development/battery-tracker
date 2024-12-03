@@ -46,8 +46,8 @@ export class ReceiptService {
       const { typeBattery } = batteriesDirectory;
 
       return (element = {
-        id: batteriesDirectoryId,
-        receiptId: id,
+        addId: batteriesDirectoryId,
+        id,
         dateOfReceiving,
         typeBattery,
         numbers,
@@ -155,13 +155,12 @@ export class ReceiptService {
 
     return result;
   }
-  async delete(data: any) {
+
+  async delete(id: number) {
     try {
-      const { id } = data;
       return await this.receiptRepository.delete(id);
     } catch (error) {
-      console.error(error);
-      return;
+      return false;
     }
   }
 }

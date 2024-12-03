@@ -57,12 +57,12 @@ const AuthButton = () => {
           }
         }}
         sx={{
-          bgcolor: "primary.main",
+          bgcolor: "primary.dark",
           color: "secondary.light",
           borderColor: "primary.dark",
           width: "300px",
           "&:hover": {
-            bgcolor: "primary.light",
+            bgcolor: "primary.main",
             borderColor: "primary.dark",
           },
         }}

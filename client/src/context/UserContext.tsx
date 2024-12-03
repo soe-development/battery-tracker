@@ -1,14 +1,15 @@
 "use client";
 import { getUser, requestLogOut } from "@/api/auth";
 import { IUser } from "@/types/user";
-import { useRouter } from "next/navigation";
 import {
   createContext,
   FC,
   PropsWithChildren,
   useCallback,
+  useEffect,
   useState,
 } from "react";
+import { usePathname, redirect } from "next/navigation";
 
 interface IUserContext {
   user: IUser | null;
@@ -30,16 +31,19 @@ export const UserContextProvider: FC<IUserContextProviderProps> = ({
   user: initialUser,
   children,
 }) => {
-  const router = useRouter();
-
   const [user, setUser] = useState(initialUser || null);
 
+  // eslint-disable-next-line react-hooks/rules-of-hook
+  const route = usePathname();
+
   const clearUser = useCallback(() => {
-    requestLogOut().then(() => {
-      setUser(null);
-      router.push("/auth");
-    });
-  }, [router]);
+    requestLogOut()
+      .then(() => {})
+      .finally(() => {
+        setUser(null);
+        window.location.reload();
+      });
+  }, []);
 
   const refetchUser = useCallback(() => {
     getUser()
@@ -48,6 +52,10 @@ export const UserContextProvider: FC<IUserContextProviderProps> = ({
       })
       .catch(() => setUser(null));
   }, []);
+
+  useEffect(() => {
+    if (!user && route.includes("cabinet")) redirect("/auth");
+  }, [user]);
 
   return (
     <UserContext.Provider value={{ user, clearUser, refetchUser }}>

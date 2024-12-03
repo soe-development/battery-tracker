@@ -19,7 +19,6 @@ const TextInput = ({
   formState,
   onChange,
 }: TextInputProps) => {
-  console.log(formState);
   return (
     <Box sx={{ py: 0.5 }}>
       <TextField

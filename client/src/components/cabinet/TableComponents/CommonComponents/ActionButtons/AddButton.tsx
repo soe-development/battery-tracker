@@ -7,7 +7,7 @@ const AddButton = ({ row }: { row: any }) => {
   const { setActiveAddId, newRow, editRow } = useContext(TableContext);
 
   const handleClick = () => {
-    setActiveAddId(row.id);
+    setActiveAddId(row.addId);
   };
 
   return (

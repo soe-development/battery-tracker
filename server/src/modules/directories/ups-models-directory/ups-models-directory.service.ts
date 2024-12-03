@@ -98,13 +98,11 @@ export class UPSModelsDirectoryService {
     return this.upsModelsDirectoryRepository.update(id, { power });
   }
 
-  async delete(data: any) {
+  async delete(id: number) {
     try {
-      const { id } = data;
       return await this.upsModelsDirectoryRepository.delete(id);
     } catch (error) {
-      console.error(error);
-      return;
+      return false;
     }
   }
 }

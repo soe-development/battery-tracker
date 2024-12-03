@@ -27,7 +27,7 @@ const themeOptions: ThemeOptions = {
     },
   },
   typography: {
-    fontFamily: "Cera Pro Regular",
+    fontFamily: "Cera Pro",
     h1: {
       fontFamily: "Cera Pro",
       textTransform: "uppercase",
@@ -66,6 +66,7 @@ const themeOptions: ThemeOptions = {
           "& .MuiTableRow-root": {
             "&:hover": {
               cursor: "pointer",
+              backgroundColor: "#e3e8f1",
             },
             "&.tableRowUpper": {
               position: "sticky",
@@ -74,7 +75,7 @@ const themeOptions: ThemeOptions = {
             },
             "&.tableRowFilter": {
               position: "sticky",
-              top: 35,
+              top: "var(--upper-row-height, 35px)", // по умолчанию 57px
               zIndex: 1,
             },
             "&.Mui-selected": {
@@ -89,14 +90,14 @@ const themeOptions: ThemeOptions = {
             fontSize: 16,
             "&.tableCellUpper": {
               fontWeight: 600,
-              userSelect: "none",
+              //userSelect: "none",
               cursor: "pointer",
               backgroundColor: "#f1f4fa",
             },
             "&.tableCellLower": {
               paddingTop: 8,
               paddingBottom: 8,
-              userSelect: "none",
+              //userSelect: "none",
               backgroundColor: "#f1f4fa",
             },
           },
@@ -112,7 +113,7 @@ const themeOptions: ThemeOptions = {
             justifyItems: "center",
             fontWeight: 600,
             fontSize: 20,
-            fontFamily: "Cera Pro Regular",
+            fontFamily: "Cera Pro",
           },
         },
       },

@@ -88,7 +88,7 @@ export class BranchesDirectoryController {
           .status(201)
           .json({ status: 201, result: 'Deleted successful' });
       } else {
-        response.status(501).json({ status: 501, result: 'Deleted failed' });
+        response.status(201).json({ status: 501, result: 'Deleted failed' });
       }
     } catch (error) {
       response.status(401).json({ status: 401, message: 'Not authorized' });

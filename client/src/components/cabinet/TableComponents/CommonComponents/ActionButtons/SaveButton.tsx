@@ -12,10 +12,9 @@ const SaveButton = () => {
 
   const { editableFields, headColumnData } = getTableState(editRow.name);
 
-  console.log(editRow.name);
-
-  const validateFields = (updatedRow: any) => {
+  const validateFields = (updatedRow: Record<string, any>) => {
     const errors: string[] = [];
+
     const isValid = Object.entries(updatedRow).every(([key, value]) => {
       if (!editableFields.includes(key)) return true;
 
@@ -23,8 +22,8 @@ const SaveButton = () => {
         (element: any) => element.name === key
       );
 
-      if (!isNotEmptyField(value as string)) {
-        errors.push(fieldInfo.label);
+      if (!fieldInfo || !isNotEmptyField(value as string)) {
+        errors.push(fieldInfo?.label ?? key);
         return false;
       }
       return true;
@@ -41,9 +40,8 @@ const SaveButton = () => {
 
     if (isValid) {
       editEntry(editRow.name, updatedRow).then(() => {
-        setEditRow({ status: false, name: "", row: {} });
         setUpdate((prev) => !prev);
-
+        setEditRow({ status: false, name: "", row: {} });
         setSnackbarState({
           type: "success",
           mainText: "Дані успішно збережено!",

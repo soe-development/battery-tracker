@@ -133,19 +133,17 @@ export class ReceiptController {
   @Post('delete')
   async delete(@Req() request: any, @Res() response: any) {
     try {
-      const { token } = request.body;
-      const dataToken = await this.jwtService.verifyAsync(token);
+      const { id } = request.body;
+      const result = await this.receiptService.delete(id);
 
-      if (!dataToken) {
-        response.status(401).json({ status: 401, result: 'Not authorized' });
+      console.log(result);
+
+      if (result) {
+        response
+          .status(201)
+          .json({ status: 201, result: 'Deleted successful' });
       } else {
-        const data = request.body;
-        this.receiptService.delete(data);
-
-        response.status(200).json({
-          status: 200,
-          message: 'Successful delete',
-        });
+        response.status(201).json({ status: 501, result: 'Deleted failed' });
       }
     } catch (error) {
       response.status(401).json({ status: 401, message: 'Not authorized' });

@@ -94,13 +94,11 @@ export class OtherEquipmentDirectoryService {
       numberOfBatteries,
     });
   }
-
-  async delete(id: any) {
+  async delete(id: number) {
     try {
       return await this.otherEquipmentDirectoryRepository.delete(id);
     } catch (error) {
-      console.error(error);
-      return;
+      return false;
     }
   }
 }

@@ -116,12 +116,17 @@ export class DistrictsDirectoryController {
   async delete(@Req() request: any, @Res() response: any) {
     try {
       const { id } = request.body;
-      const result = this.districtsDirectoryService.delete(id);
+      const result = await this.districtsDirectoryService.delete(id);
 
-      response.status(200).json({
-        status: 200,
-        message: 'Successful delete',
-      });
+      console.log(result);
+
+      if (result) {
+        response
+          .status(201)
+          .json({ status: 201, result: 'Deleted successful' });
+      } else {
+        response.status(201).json({ status: 501, result: 'Deleted failed' });
+      }
     } catch (error) {
       response.status(401).json({ status: 401, message: 'Not authorized' });
     }
