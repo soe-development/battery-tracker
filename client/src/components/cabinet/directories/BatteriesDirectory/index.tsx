@@ -25,7 +25,7 @@ const style = {
 };
 
 const BatteriesDirectory = () => {
-  const { activeTable, setNewRow, setUpdate, editRow } =
+  const { activeTable, setNewRow, setUpdate, editRow, rowsTopTable } =
     useContext(TableContext);
 
   return (
@@ -57,6 +57,7 @@ const BatteriesDirectory = () => {
         >
           Оновити таблицю
         </Button>
+        {rowsTopTable.length === 0 && <LinearProgress />}
       </Paper>
       {activeTable ? (
         <TWrapper topTable={activeTable} bottomTable={false} />

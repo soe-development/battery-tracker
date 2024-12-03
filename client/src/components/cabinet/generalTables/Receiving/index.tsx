@@ -11,7 +11,7 @@ import { useContext } from "react";
 import TWrapper from "../../TableComponents/TWrapper";
 
 const ReceivingDirectory = () => {
-  const { activeTable, setNewRow, setUpdate, editRow } =
+  const { activeTable, setNewRow, setUpdate, editRow, rowsTopTable } =
     useContext(TableContext);
 
   return (
@@ -43,10 +43,11 @@ const ReceivingDirectory = () => {
         >
           Оновити таблицю
         </Button>
+        {rowsTopTable.length === 0 && <LinearProgress />}
       </Paper>
       {activeTable ? (
         <Box sx={{ display: "grid", height: 10 }}>
-          <TWrapper topTable={activeTable} bottomTable={"expenses-table"} />
+          <TWrapper topTable={activeTable} bottomTable={"costs"} />
         </Box>
       ) : (
         <LinearProgress />

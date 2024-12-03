@@ -120,6 +120,57 @@ const TWrapper = ({
       <Box ref={resizerRef}>
         <TPagination activeTable={topTable} />
       </Box>
+      <Box
+        sx={{
+          backgroundColor: "primary.light",
+          borderBottom: "1px solid #e0e0e0",
+          borderLeft: "1px solid #e0e0e0",
+          borderRight: "1px solid #e0e0e0",
+          display: "flex",
+          borderRadius: 0,
+        }}
+      >
+        <Box
+          sx={{
+            alignContent: "center",
+            px: 2,
+            borderRight: "1px solid #e0e0e0",
+          }}
+        >
+          <Typography
+            sx={{
+              fontWeight: 600,
+            }}
+          >
+            {nameBottomTable}
+          </Typography>
+        </Box>
+        {activeAddId > 0 && (
+          <>
+            {!bottomTableExceptionKeyColumn?.includes("actions") && (
+              <Box
+                sx={{
+                  borderRight: "1px solid #e0e0e0",
+                  p: "4px",
+                  alignContent: "center",
+                }}
+              >
+                <CreateButton name={bottomTable as string} />
+              </Box>
+            )}
+
+            <Box
+              sx={{
+                borderRight: "1px solid #e0e0e0",
+                p: "4px",
+                alignContent: "center",
+              }}
+            >
+              <ClearButton />
+            </Box>
+          </>
+        )}
+      </Box>
       {bottomTable && (
         <TableContainer
           component={Paper}
@@ -130,57 +181,6 @@ const TWrapper = ({
             height: `${tableHeight}px`,
           }}
         >
-          <Box
-            sx={{
-              backgroundColor: "primary.light",
-              borderBottom: "1px solid #e0e0e0",
-              borderLeft: "1px solid #e0e0e0",
-              borderRight: "1px solid #e0e0e0",
-              display: "flex",
-              borderRadius: 0,
-            }}
-          >
-            <Box
-              sx={{
-                alignContent: "center",
-                px: 2,
-                borderRight: "1px solid #e0e0e0",
-              }}
-            >
-              <Typography
-                sx={{
-                  fontWeight: 600,
-                }}
-              >
-                {nameBottomTable}
-              </Typography>
-            </Box>
-            {activeAddId > 0 && (
-              <>
-                {!bottomTableExceptionKeyColumn?.includes("actions") && (
-                  <Box
-                    sx={{
-                      borderRight: "1px solid #e0e0e0",
-                      p: "4px",
-                      alignContent: "center",
-                    }}
-                  >
-                    <CreateButton name={bottomTable as string} />
-                  </Box>
-                )}
-
-                <Box
-                  sx={{
-                    borderRight: "1px solid #e0e0e0",
-                    p: "4px",
-                    alignContent: "center",
-                  }}
-                >
-                  <ClearButton />
-                </Box>
-              </>
-            )}
-          </Box>
           <Table stickyHeader aria-label="sticky table">
             <THeaderBottom activeTable={bottomTable as string} />
             <TBodyBottom activeTable={bottomTable as string} />

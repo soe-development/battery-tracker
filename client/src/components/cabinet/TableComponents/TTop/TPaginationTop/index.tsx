@@ -24,7 +24,7 @@ const TPaginationTop = ({ activeTable }: { activeTable: string }) => {
   return (
     <TablePagination
       component="div"
-      count={rowsTopTable.length} //rows.length
+      count={rowsTopTable.length}
       page={pageTopTable}
       onPageChange={handleChangePage}
       rowsPerPage={rowsPerPageTopTable}

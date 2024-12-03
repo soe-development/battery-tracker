@@ -13,8 +13,13 @@ import {
 import { getTab } from "./getTab";
 import { modifyTableData } from "./modifyTableData";
 import { getData, getDataById } from "@/api/table/table";
+import { createNotificationsEntry } from "@/api/notification";
+import { CircularProgress } from "@mui/material";
+import dayjs from "dayjs";
 
 interface ITableContext {
+  loading: boolean;
+  setLoading: Dispatch<SetStateAction<boolean>>;
   activeTable: string;
 
   update: boolean;
@@ -69,9 +74,16 @@ interface ITableContext {
   refetchTable: (activeTable: string) => Promise<void>;
 
   refetchTableById: (activeTable: string) => Promise<void>;
+
+  startDateGlobalFilter: any;
+  setStartDateGlobalFilter: Dispatch<SetStateAction<any>>;
+  endDateGlobalFilter: any;
+  setEndDateGlobalFilter: Dispatch<SetStateAction<any>>;
 }
 
 const TableContext = createContext<ITableContext>({
+  loading: false,
+  setLoading: () => {},
   activeTable: "",
 
   update: true,
@@ -125,6 +137,12 @@ const TableContext = createContext<ITableContext>({
 
   refetchTable: async () => {},
   refetchTableById: async () => {},
+
+  startDateGlobalFilter: "",
+  setStartDateGlobalFilter: () => {},
+
+  endDateGlobalFilter: "",
+  setEndDateGlobalFilter: () => {},
 });
 
 export const TableContextProvider: FC<PropsWithChildren> = ({ children }) => {
@@ -140,7 +158,7 @@ export const TableContextProvider: FC<PropsWithChildren> = ({ children }) => {
     getTableState(tab).initialFilters
   );
   const [pageTopTable, setPageTopTable] = useState(0);
-  const [rowsPerPageTopTable, setRowsPerPageTopTable] = useState(50);
+  const [rowsPerPageTopTable, setRowsPerPageTopTable] = useState(100);
   const [orderByTopTable, setOrderByTopTable] = useState<string>("rowNumber");
   const [orderTopTable, setOrderTopTable] = useState<string>("asc");
 
@@ -181,12 +199,28 @@ export const TableContextProvider: FC<PropsWithChildren> = ({ children }) => {
     name: "",
   });
 
+  const [loading, setLoading] = useState(false);
+
+  const [startDateGlobalFilter, setStartDateGlobalFilter] = useState(
+    dayjs("2000-01-01")
+  );
+  const [endDateGlobalFilter, setEndDateGlobalFilter] = useState(
+    dayjs(new Date())
+  );
+
   const refetchTable = useCallback(async (activeTable: string) => {
+    const abortController = new AbortController();
+
     try {
       const { data } = await getData(activeTable);
+      setLoading(true);
       setRowsTopTable(modifyTableData(data));
-    } catch {
-      setRowsTopTable([]);
+    } catch (error) {
+      console.error(error);
+      setRowsTopTable([]); // Обрабатываем ошибку
+    } finally {
+      abortController.abort();
+      setLoading(false);
     }
   }, []);
 
@@ -194,9 +228,12 @@ export const TableContextProvider: FC<PropsWithChildren> = ({ children }) => {
     async (activeTable: string) => {
       try {
         const { data } = await getDataById(activeTable, activeAddId);
+        setLoading(true);
         setRowsBottomTable(modifyTableData(data));
       } catch {
         setRowsBottomTable([]);
+      } finally {
+        setLoading(false);
       }
     },
     [activeAddId]
@@ -205,6 +242,8 @@ export const TableContextProvider: FC<PropsWithChildren> = ({ children }) => {
   return (
     <TableContext.Provider
       value={{
+        loading,
+        setLoading,
         activeTable,
         update,
         setUpdate,
@@ -254,6 +293,11 @@ export const TableContextProvider: FC<PropsWithChildren> = ({ children }) => {
 
         refetchTable,
         refetchTableById,
+
+        startDateGlobalFilter,
+        setStartDateGlobalFilter,
+        endDateGlobalFilter,
+        setEndDateGlobalFilter,
       }}
     >
       {children}

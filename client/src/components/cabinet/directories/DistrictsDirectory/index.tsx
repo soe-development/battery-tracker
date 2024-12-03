@@ -11,7 +11,7 @@ import { useContext } from "react";
 import TWrapper from "../../TableComponents/TWrapper";
 
 const DistrictsDirectory = () => {
-  const { activeTable, editRow, setNewRow, setUpdate } =
+  const { activeTable, editRow, setNewRow, setUpdate, rowsTopTable } =
     useContext(TableContext);
 
   return (
@@ -53,6 +53,7 @@ const DistrictsDirectory = () => {
         >
           Оновити таблицю
         </Button>
+        {rowsTopTable.length === 0 && <LinearProgress />}
       </Paper>
       {activeTable ? (
         <TWrapper topTable={activeTable} bottomTable={false} />

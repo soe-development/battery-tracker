@@ -75,7 +75,7 @@ const themeOptions: ThemeOptions = {
             },
             "&.tableRowFilter": {
               position: "sticky",
-              top: 35,
+              top: "var(--upper-row-height, 35px)", // по умолчанию 57px
               zIndex: 1,
             },
             "&.Mui-selected": {
@@ -90,14 +90,14 @@ const themeOptions: ThemeOptions = {
             fontSize: 16,
             "&.tableCellUpper": {
               fontWeight: 600,
-              userSelect: "none",
+              //userSelect: "none",
               cursor: "pointer",
               backgroundColor: "#f1f4fa",
             },
             "&.tableCellLower": {
               paddingTop: 8,
               paddingBottom: 8,
-              userSelect: "none",
+              //userSelect: "none",
               backgroundColor: "#f1f4fa",
             },
           },
