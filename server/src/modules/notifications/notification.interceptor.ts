@@ -21,10 +21,8 @@ export class NotificationsInterceptor implements NestInterceptor {
     next: CallHandler,
   ): Promise<Observable<any>> {
     try {
-      // Получаем данные перед выполнением основного запроса
       const data = await this.equipmentCardService.findCommonData();
 
-      // Формируем массив уведомлений
       const equipmentCardNotification = data.map((item: any) => ({
         status: 'unread',
         text:
@@ -38,21 +36,17 @@ export class NotificationsInterceptor implements NestInterceptor {
         route: 'equipment-card',
       }));
 
-      // Сохраняем уведомления в БД
       const result = await this.notificationsService.create(
         equipmentCardNotification,
       );
 
-      // Проверяем результат
       if (!result) {
         console.error('Ошибка: уведомления не были сохранены!');
         throw new Error('Ошибка при создании уведомлений');
       }
 
-      // Если всё успешно, продолжаем выполнение запроса
       return next.handle().pipe(
         map((response) => {
-          // Можно модифицировать ответ, если нужно
           return response;
         }),
       );
