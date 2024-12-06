@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EquipmentCard } from 'src/entities/directories/equipment-card.entity';
 import { UPSModelsDirectory } from 'src/entities/directories/ups-models-directory.entity';
+import { NotificationsService } from 'src/modules/notifications/notifications.service';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -11,6 +12,7 @@ export class EquipmentCardService {
     private readonly equipmentCardRepository: Repository<EquipmentCard>,
     @InjectRepository(UPSModelsDirectory)
     private readonly upsModelsDirectoryRepository: Repository<UPSModelsDirectory>,
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   async create(data: any): Promise<EquipmentCard> {
@@ -22,79 +24,91 @@ export class EquipmentCardService {
       .createQueryBuilder('equipmentCard')
       .leftJoin('equipmentCard.upsModelsDirectory', 'upsModelsDirectory')
       .leftJoin(
-        'upsModelsDirectory.otherEquipmentDirectory',
+        'equipmentCard.otherEquipmentDirectory',
         'otherEquipmentDirectory',
       )
       .leftJoin(
+        'upsModelsDirectory.batteriesDirectory',
+        'upsBatteriesDirectory',
+      )
+      .leftJoin(
         'otherEquipmentDirectory.batteriesDirectory',
-        'batteriesDirectory',
+        'otherBatteriesDirectory',
       )
       .select([
         'equipmentCard',
         'upsModelsDirectory',
         'otherEquipmentDirectory',
-        'batteriesDirectory',
+        'upsBatteriesDirectory',
+        'otherBatteriesDirectory',
       ])
       .getMany();
 
-    const result = data
-      .map(
-        ({
-          id,
-          date,
-          typeBattery,
-          numberOfBatteries,
-          upsModelsDirectory,
-        }: any) => {
-          if (!upsModelsDirectory) {
-            return null;
-          }
+    const result = data.map((element: any) => {
+      const {
+        id,
+        upsModelsDirectory,
+        otherEquipmentDirectory,
+        createDate,
+        writtenOff,
+      } = element;
 
-          const {
-            id: upsModelsDirectoryId,
-            power,
-            yearProductionUPS,
-            inventoryNumber,
-            s_n,
-            apcs,
-            otherEquipmentDirectory,
-          } = upsModelsDirectory;
+      const {
+        id: directoryId,
+        producer,
+        model,
+        power,
+        typeBattery,
+        numberOfBatteries,
+        yearProductionUPS,
+        inventoryNumber,
+        s_n,
+        apcs,
+        batteriesDirectoryId,
+        objectsDirectoryId,
+        objectLocation,
+        dateOfLastBatteryReplacement,
+        batteriesDirectory,
+      } = upsModelsDirectory || otherEquipmentDirectory || {};
 
-          if (!otherEquipmentDirectory) {
-            return null;
-          }
+      const { term } = batteriesDirectory;
 
-          const {
-            id: otherEquipmentDirectoryId,
-            producer,
-            model,
-            numberOfBatteries: otherNumberOfBatteries,
-            batteriesDirectory,
-          } = otherEquipmentDirectory;
+      const upsModelsDirectoryId = upsModelsDirectory ? directoryId : null;
+      const otherEquipmentDirectoryId = otherEquipmentDirectory
+        ? directoryId
+        : null;
 
-          const { id: batteriesDirectoryId, typeBattery: otherTypeBattery } =
-            batteriesDirectory || {};
+      const today = new Date();
+      const year = today.getFullYear();
 
-          return {
-            id,
-            addId: batteriesDirectoryId,
-            upsModelsDirectoryId,
-            otherEquipmentDirectoryId,
-            batteriesDirectoryId,
-            producer,
-            model,
-            power,
-            typeBattery: typeBattery || otherTypeBattery,
-            numberOfBatteries: numberOfBatteries || otherNumberOfBatteries,
-            yearProductionUPS,
-            inventoryNumber,
-            s_n,
-            apcs,
-            //date,
-          };
-        },
-      )
-      .filter(Boolean); // Фильтруем `null` значения, если они возникли из-за отсутствия `upsModelsDirectory` или `otherEquipmentDirectory`.
+      return {
+        id,
+        addId: id,
+        upsModelsDirectoryId,
+        otherEquipmentDirectoryId,
+        batteriesDirectoryId,
+        producer,
+        model,
+        power,
+        typeBattery,
+        numberOfBatteries,
+        term,
+        yearProductionUPS,
+        inventoryNumber,
+        s_n,
+        apcs,
+        objectLocation,
+        writtenOff: writtenOff,
+        colorRow:
+          writtenOff === 'Списано'
+            ? ''
+            : year - yearProductionUPS - term === 1
+            ? '#f2f29d'
+            : year - yearProductionUPS > term
+            ? '#f09c9c'
+            : '',
+      };
+    });
 
     return result;
   }
@@ -106,6 +120,10 @@ export class EquipmentCardService {
         .leftJoin(
           'equipmentCardRepository.upsModelsDirectory',
           'upsModelsDirectory',
+        )
+        .leftJoin(
+          'equipmentCardRepository.otherEquipmentDirectory',
+          'otherEquipmentDirectory',
         )
         .select(['equipmentCardRepository'])
         .where('equipmentCardRepository.upsModelsDirectoryId = :id', {
@@ -119,6 +137,31 @@ export class EquipmentCardService {
       return result;
     } catch (error) {
       return [];
+    }
+  }
+
+  async update(data: any) {
+    try {
+      const { id, writtenOff } = data;
+
+      const result = await this.equipmentCardRepository.update(id, {
+        writtenOff: writtenOff,
+      });
+
+      if (writtenOff === 'Списано')
+        try {
+          await this.notificationsService.deleteByNameTableAndId(
+            'equipment_card',
+            id,
+          );
+        } catch (error) {
+          console.log('Entry not found');
+        }
+
+      return result;
+    } catch (error) {
+      console.error('Update error:', error);
+      return false;
     }
   }
 

@@ -33,7 +33,6 @@ export const UserContextProvider: FC<IUserContextProviderProps> = ({
 }) => {
   const [user, setUser] = useState(initialUser || null);
 
-  // eslint-disable-next-line react-hooks/rules-of-hook
   const route = usePathname();
 
   const clearUser = useCallback(() => {
@@ -55,7 +54,7 @@ export const UserContextProvider: FC<IUserContextProviderProps> = ({
 
   useEffect(() => {
     if (!user && route.includes("cabinet")) redirect("/auth");
-  }, [user]);
+  }, [route, user]);
 
   return (
     <UserContext.Provider value={{ user, clearUser, refetchUser }}>

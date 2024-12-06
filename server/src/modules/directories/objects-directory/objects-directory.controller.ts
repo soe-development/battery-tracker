@@ -41,6 +41,7 @@ export class ObjectsDirectoryController {
   async get(@Req() request: any, @Res() response: any) {
     try {
       const data = await this.objectsDirectoryService.find();
+
       response.status(200).json({
         data: data,
         status: 200,

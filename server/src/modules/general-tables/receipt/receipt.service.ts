@@ -69,8 +69,6 @@ export class ReceiptService {
       .where('receipt.id = :id', { id: id })
       .getMany();
 
-    console.log(data, id);
-
     const result = data.map((element: any) => {
       const { batteriesDirectory } = element;
 
@@ -119,7 +117,7 @@ export class ReceiptService {
       const {
         objectsDirectory: {
           id: objectId,
-          name: objectName,
+          name: objectsDirectoryName,
           voltage,
           districtsDirectory: { id: districtId, name: districtName },
         },
@@ -138,7 +136,7 @@ export class ReceiptService {
 
       return (element = {
         objectId,
-        objectName,
+        objectsDirectoryName,
         voltage,
         districtId,
         districtName,
@@ -154,6 +152,23 @@ export class ReceiptService {
     });
 
     return result;
+  }
+
+  async update(data: any) {
+    const {
+      id,
+      dateOfReceiving,
+      batteriesDirectoryId,
+      numbers,
+      currentBalance,
+    } = data;
+
+    return await this.receiptRepository.update(id, {
+      dateOfReceiving,
+      batteriesDirectoryId,
+      numbers,
+      currentBalance,
+    });
   }
 
   async delete(id: number) {

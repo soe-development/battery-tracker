@@ -37,6 +37,7 @@ export class BatteriesDirectoryController {
   async find(@Req() request: any, @Res() response: any) {
     try {
       const data = await this.batteriesDirectoryService.find();
+
       response.status(200).json({
         data: data,
         status: 200,

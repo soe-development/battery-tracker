@@ -90,7 +90,7 @@ export class UPSModelsDirectoryController {
           value: objectsDirectory.map((element: any) => {
             return {
               id: element.id,
-              name: element.objectName,
+              name: element.objectsDirectoryName,
             };
           }),
         },

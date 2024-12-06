@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { CostsService } from './costs.service';
 import { AuthGuard } from 'src/modules/auth/auth.middleware';
 
-@Controller('expenses-table')
+@Controller('costs')
 @UseGuards(AuthGuard)
 export class CostsController {
   constructor(

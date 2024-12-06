@@ -21,211 +21,96 @@ export class TotalService {
   }
 
   async find() {
-    // const data = await this.upsModelsDirectoryRepository
-    //   .createQueryBuilder('upsModelsDirectory')
-    //   .leftJoin('upsModelsDirectory.objectsDirectory', 'objectsDirectory')
-    //   .leftJoin('objectsDirectory.districtsDirectory', 'districtsDirectory')
-    //   .leftJoin(
-    //     'upsModelsDirectory.otherEquipmentDirectory',
-    //     'otherEquipmentDirectory',
-    //   )
-    //   .leftJoin(BatteryReplacement, 'batteryReplacement')
-    //   .select([
-    //     'upsModelsDirectory',
-    //     'objectsDirectory',
-    //     'districtsDirectory',
-    //     'otherEquipmentDirectory',
-    //     'batteriesDirectory',
-    //   ])
-    //   .getMany();
+    const data = await this.batteryReplacementRepository.query(`
+      SELECT 
+          br.id AS id,
+          MAX(br.createDate) AS dateOfLastBatteryReplacement,
+  
+          ec.id AS equipmentCardId,
+          ups.producer AS producer,
+          ups.model AS model,
+          ups.power AS power,
+          br.typeBattery AS typeBattery,
+          br.numberOfBatteries AS numberOfBatteries,
+          ups.inventoryNumber AS inventoryNumber,
+  
+          obj.name AS objectsDirectoryName,
+          obj.voltage AS voltage,
+          dist.name AS districtName,
+  
+          NULL AS batteryId
+  
+      FROM battery_replacement br
+      JOIN equipment_card ec ON ec.id = br.equipmentCardId
+      JOIN ups_models_directory ups ON ups.id = ec.upsModelsDirectoryId
+      LEFT JOIN objects_directory obj ON obj.id = ups.objectsDirectoryId
+      LEFT JOIN districts_directory dist ON dist.id = obj.districtsDirectoryId
 
-    const data = await this.batteryReplacementRepository
-      .createQueryBuilder('batteryReplacement')
-      .leftJoin('batteryReplacement.equipmentCard', 'equipmentCard')
-      .leftJoin('equipmentCard.upsModelsDirectory', 'upsModelsDirectory')
-      .leftJoin(
-        'upsModelsDirectory.otherEquipmentDirectory',
-        'otherEquipmentDirectory',
-      )
-      .leftJoin('upsModelsDirectory.objectsDirectory', 'objectsDirectory')
-      .leftJoin('objectsDirectory.districtsDirectory', 'districtsDirectory')
-      .select([
-        'batteryReplacement',
-        'equipmentCard',
-        'upsModelsDirectory',
-        'objectsDirectory',
-        'districtsDirectory',
-        'MAX(batteryReplacement.id) AS maxBatteryReplacementCreateDate',
-      ])
-      .groupBy('upsModelsDirectory.id')
-      .addGroupBy('otherEquipmentDirectory.id')
-      .addGroupBy('objectsDirectory.id')
-      .addGroupBy('districtsDirectory.id')
-      .addGroupBy('batteryReplacement.id')
-      .getMany();
+      WHERE ec.writtenOff = "Дійсне"
+  
+      GROUP BY 
+          br.id, ec.id, ups.producer, ups.model, ups.power, ups.typeBattery,
+          ups.numberOfBatteries, ups.inventoryNumber, obj.name, obj.voltage, dist.name
+  
+      UNION ALL
+  
+      SELECT 
+          br.id AS id,
+          MAX(br.createDate) AS dateOfLastBatteryReplacement,
+  
+          ec.id AS equipmentCardId,
+          other.producer AS producer,
+          other.model AS model,
+          other.power AS power,
+          br.typeBattery AS typeBattery,
+          br.numberOfBatteries AS numberOfBatteries,
+          other.inventoryNumber AS inventoryNumber,
+  
+          obj.name AS objectsDirectoryName,
+          obj.voltage AS voltage,
+          dist.name AS districtName,
+  
+          other.batteriesDirectoryId AS batteryId
+  
+      FROM battery_replacement br
+      JOIN equipment_card ec ON ec.id = br.equipmentCardId
+      JOIN other_equipment_directory other ON other.id = ec.otherEquipmentDirectoryId
+      LEFT JOIN objects_directory obj ON obj.id = other.objectsDirectoryId
+      LEFT JOIN districts_directory dist ON dist.id = obj.districtsDirectoryId
+
+      WHERE ec.writtenOff = "Дійсне"
+  
+      GROUP BY 
+          br.id, ec.id, other.producer, other.model, other.power, br.typeBattery,
+          br.numberOfBatteries, other.inventoryNumber, other.batteriesDirectoryId,
+          obj.name, obj.voltage, dist.name
+  
+      ORDER BY id;
+    `);
 
     const result = data.map((element: any) => {
-      // Основные свойства
-      const id = element.id || 0;
-
-      const typeBattery = element.typeBattery || 'N/A';
-      const numberOfBatteries = element.numberOfBatteries;
-
-      const dateOfLastBatteryReplacement = element.createDate || 'N/A';
-
-      // Обработка equipmentCard
-      const equipmentCard = element.equipmentCard || {};
-      const upsModelsDirectory = equipmentCard.upsModelsDirectory || {};
-
-      // Обработка upsModelsDirectory
-      const upsModelsDirectoryId = upsModelsDirectory.id || 'N/A';
-      const power = upsModelsDirectory.power || 0;
-      const inventoryNumber = upsModelsDirectory.inventoryNumber || 'N/A';
-
-      const objectsDirectory = upsModelsDirectory.objectsDirectory || {};
-
-      const objectName = objectsDirectory.name || 'N/A';
-      const voltage = objectsDirectory.voltage || 'N/A';
-      const districtsDirectory = objectsDirectory.districtsDirectory;
-      const districtName = districtsDirectory.name || 'N/A';
-
-      // Обработка otherEquipmentDirectory
-      const otherEquipmentDirectory =
-        upsModelsDirectory.otherEquipmentDirectory || {};
-
-      // Обработка batteriesDirectory
-      const batteriesDirectory =
-        otherEquipmentDirectory.batteriesDirectory || {};
-      const batteryId = batteriesDirectory.id || 'N/A';
-      const model = otherEquipmentDirectory.model || 'N/A';
-      const producer = otherEquipmentDirectory.producer || 'N/A';
-
-      // Обработка createDate
-      const createDate = element.createDate || 'N/A';
-
       return {
-        id,
-        upsModelsDirectoryId,
-        districtName,
-        objectName,
-        voltage,
-        producer,
-        model,
-        power,
-        numberOfBatteries,
-        inventoryNumber,
-        batteryId,
-        typeBattery,
-        dateOfLastBatteryReplacement,
-
-        //createDate,
+        id: element.id || 0,
+        upsModelsDirectoryId: element.upsModelsDirectoryId || 'N/A',
+        districtName: element.districtName || 'N/A',
+        objectsDirectoryName: element.objectsDirectoryName || 'N/A',
+        voltage: element.voltage || 'N/A',
+        producer: element.producer || 'N/A',
+        model: element.model || 'N/A',
+        power: element.power || 0,
+        numberOfBatteries: element.numberOfBatteries || 0,
+        inventoryNumber: element.inventoryNumber || 'N/A',
+        batteryId: element.batteryId || 'N/A',
+        typeBattery: element.typeBattery || 'N/A',
+        dateOfLastBatteryReplacement:
+          new Date(element.dateOfLastBatteryReplacement)
+            .toISOString()
+            .split('T')[0] || 'N/A',
       };
     });
 
-    // Формирование результирующего объекта
     return result;
   }
-
-  // async find() {
-  //   const data = await this.totalRepository
-  //     .createQueryBuilder('totalRepository')
-  //     .leftJoin('totalRepository.upsModelsDirectory', 'upsModelsDirectory')
-  //     .leftJoin(
-  //       'upsModelsDirectory.otherEquipmentDirectory',
-  //       'otherEquipmentDirectory',
-  //     )
-  //     .leftJoin(
-  //       'otherEquipmentDirectory.batteriesDirectory',
-  //       'batteriesDirectory',
-  //     )
-  //     .leftJoin('totalRepository.objectsDirectory', 'objectsDirectory')
-  //     .leftJoin('objectsDirectory.districtsDirectory', 'districtsDirectory')
-  //     .leftJoin('totalRepository.equipmentCard', 'equipmentCard')
-  //     .select([
-  //       'totalRepository',
-  //       'upsModelsDirectory',
-  //       'otherEquipmentDirectory',
-  //       'batteriesDirectory',
-  //       'objectsDirectory',
-  //       'districtsDirectory',
-  //       'equipmentCard',
-  //     ])
-  //     .getMany();
-
-  //   const result = data.map((element: any) => {
-  //     // Основные свойства
-  //     const id = element.id || 0;
-
-  //     // Обработка objectsDirectory
-  //     const objectsDirectory = element.objectsDirectory || {};
-  //     const objectId = objectsDirectory.id || 0;
-  //     const objectName = objectsDirectory.name || 'N/A';
-  //     const voltage = objectsDirectory.voltage || 'N/A';
-
-  //     const districtsDirectory = objectsDirectory.districtsDirectory || {};
-  //     const districtId = districtsDirectory.id || 0;
-  //     const districtName = districtsDirectory.name || 'N/A';
-
-  //     // Обработка upsModelsDirectory
-  //     const upsModelsDirectory = element.upsModelsDirectory || {};
-  //     const upsModelsDirectoryId = upsModelsDirectory.id || 'N/A';
-  //     const power = upsModelsDirectory.power || 'N/A';
-  //     const inventoryNumber = upsModelsDirectory.inventoryNumber || 'N/A';
-
-  //     // Обработка otherEquipmentDirectory
-  //     const otherEquipmentDirectory =
-  //       upsModelsDirectory.otherEquipmentDirectory || {};
-
-  //     // Обработка batteriesDirectory
-  //     const batteriesDirectory =
-  //       otherEquipmentDirectory.batteriesDirectory || {};
-  //     const batteryId = batteriesDirectory.id || 'N/A';
-  //     const typeBattery = batteriesDirectory.typeBattery || 'N/A';
-
-  //     const dateOfLastBatteryReplacement =
-  //       otherEquipmentDirectory.dateOfLastBatteryReplacement || 'N/A';
-  //     const model = otherEquipmentDirectory.model || 'N/A';
-  //     const numberOfBatteries =
-  //       otherEquipmentDirectory.numberOfBatteries || 'N/A';
-  //     const producer = otherEquipmentDirectory.producer || 'N/A';
-
-  //     // Обработка equipmentCard
-  //     const equipmentCard = element.equipmentCard || {};
-  //     const equipmentCardId = equipmentCard.id || 0;
-  //     //const equipmentCardTypeBattery = equipmentCard.typeBattery || 'N/A';
-  //     // const equipmentCardNumberOfBatteries =
-  //     //   equipmentCard.numberOfBatteries || 'N/A';
-  //     //const equipmentCardDate = equipmentCard.date || 'N/A';
-  //     return {
-  //       id,
-  //       objectId,
-  //       districtId,
-  //       upsModelsDirectoryId,
-  //       equipmentCardId,
-  //       batteryId,
-
-  //       districtName,
-  //       objectName,
-  //       voltage,
-
-  //       producer,
-  //       model,
-  //       power,
-  //       numberOfBatteries,
-  //       inventoryNumber,
-  //       typeBattery,
-  //       dateOfLastBatteryReplacement,
-
-  //       // equipmentCardTypeBattery,
-  //       // equipmentCardNumberOfBatteries,
-  //       // equipmentCardDate,
-  //     };
-  //   });
-
-  //   // Формирование результирующего объекта
-
-  //   return result;
-  // }
 
   async delete(data: any) {
     try {

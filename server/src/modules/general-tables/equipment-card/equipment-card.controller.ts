@@ -1,7 +1,14 @@
-import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { EquipmentCardService } from './equipment-card.service';
-import { InjectRepository } from '@nestjs/typeorm';
 import { UPSModelsDirectoryService } from 'src/modules/directories/ups-models-directory/ups-models-directory.service';
 import { AuthGuard } from 'src/modules/auth/auth.middleware';
 
@@ -98,6 +105,37 @@ export class EquipmentCardController {
         status: 200,
         message: 'Successful find',
       });
+    } catch (error) {
+      response.status(401).json({ status: 401, message: 'Not authorized' });
+    }
+  }
+
+  @Get('writeOff/find')
+  async getWriteOff(@Res() response: any) {
+    response.status(200).json({
+      data: [
+        { id: 1, writtenOff: 'Дійсне' },
+        { id: 2, writtenOff: 'Списано' },
+      ],
+      status: 200,
+      message: 'Successful find',
+    });
+  }
+
+  @Post('update')
+  async update(@Req() request: any, @Res() response: any) {
+    try {
+      const { data } = request.body;
+
+      const result = this.equipmentCardService.update(data);
+
+      if (result) {
+        response
+          .status(201)
+          .json({ status: 201, result: 'Updated successful' });
+      } else {
+        response.status(501).json({ status: 501, result: 'Updated failed' });
+      }
     } catch (error) {
       response.status(401).json({ status: 401, message: 'Not authorized' });
     }
